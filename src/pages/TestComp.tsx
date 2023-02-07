@@ -1,17 +1,16 @@
-import useSWR from 'swr'
-import { Data } from './api/hello';
-import { fetcher } from './utils';
-
-const useGetUser = () => useSWR<Data>('/api/hello', fetcher)
+import axios from 'axios';
 
 const TestComponent = () => {
-  const { data, error, isLoading } = useGetUser();
+  // const { data, error, isLoading } = useGetUser();
+  const createUserRes = async () => await axios.post('/api/hello', {});
 
-  if(isLoading) return <p>loading...</p>;
-  if(error) return <p>something went wrong</p>;
+  // if(isLoading) return <p>loading...</p>;
+  // if(error) return <p>something went wrong</p>;
   
   return <div>
-    hello <span>{data?.name}</span>
+    {/* hello <span>{data?.name}</span> */}
+    <button type="button" onClick={createUserRes}>click me!</button>
+    Hello world
   </div>
 } 
 

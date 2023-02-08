@@ -4,9 +4,21 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../theme';
 
-export default function App({ Component, pageProps }: AppProps) {
+import { CacheProvider, EmotionCache } from '@emotion/react';
+import createEmotionCache from '../createEmotionCache';
+
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
+
+interface AppPropsWithEMotion extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+export default function App(props: AppPropsWithEMotion) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
   return (
-    <>
+    <CacheProvider value={emotionCache}>
       <Head>
         <title>Create Next App</title>
         <meta name="description" content="Italian restaurant" />
@@ -18,6 +30,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
-    </>
+    </CacheProvider>
   );
 }

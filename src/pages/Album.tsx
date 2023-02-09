@@ -9,7 +9,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
-import Item from './Item';
+import { Cart } from '@/components/Cart';
+import { get, post } from '@/servise/fetch';
+import { useMutation, useQuery } from 'react-query';
 
 function Copyright() {
   return (
@@ -27,6 +29,9 @@ function Copyright() {
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export default function Album() {
+  const { data: userData } = useQuery('test', () => get<any>('/api/hello'));
+  const { mutateAsync } = useMutation(() => post('/api/hello', {}));
+
   return (
     <>
       <AppBar position="relative">
@@ -55,7 +60,9 @@ export default function Album() {
               sweet, but not too short so folks don&apos;t simply skip over it entirely.
             </Typography>
             <Stack sx={{ pt: 4 }} direction="row" spacing={2} justifyContent="center">
-              <Button variant="contained">Main call to action</Button>
+              <Button variant="contained" onClick={() => mutateAsync()}>
+                Main call to action
+              </Button>
               <Button variant="outlined">Secondary action</Button>
             </Stack>
           </Container>
@@ -63,8 +70,8 @@ export default function Album() {
         <Container sx={{ py: 8 }} maxWidth="lg">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Item card={card} key={card} />
+            {userData?.map((card: any) => (
+              <Cart card={card.personid} key={card.personid} />
             ))}
           </Grid>
         </Container>

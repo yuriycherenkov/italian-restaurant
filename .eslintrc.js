@@ -30,14 +30,12 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'react-hooks', 'emotion', 'pretty-imports', '@typescript-eslint'],
+  plugins: ['react', 'react-hooks', '@emotion', 'pretty-imports', '@typescript-eslint'],
   rules: {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 0,
     'no-empty-pattern': 0,
-    'no-unused-vars': 0,
-    'emotion/jsx-import': 'error',
-    'emotion/no-vanilla': 'error',
+    'react/react-in-jsx-scope': 0,
   },
 };

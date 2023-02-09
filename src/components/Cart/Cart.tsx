@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-const Item: React.FC<{ card: number }> = ({ card }) => {
+const Cart: React.FC<{ card: number }> = ({ card }) => {
   return (
     <Grid item key={card} xs={12} sm={6} md={4}>
       <Card>
@@ -30,4 +30,4 @@ const Item: React.FC<{ card: number }> = ({ card }) => {
   );
 };
 
-export default Item;
+export default Cart;

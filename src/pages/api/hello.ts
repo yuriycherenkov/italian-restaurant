@@ -3,8 +3,8 @@ import prisma from '@/lib/prisma';
 import { Person } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
-import { onError } from '../utils/onError';
-import { generateId } from '../utils/uuid';
+import { onError } from '../../utils/onError';
+import { generateId } from '../../utils/uuid';
 
 const createUserPrisma = async (userData: Person) =>
   await prisma.person.create({

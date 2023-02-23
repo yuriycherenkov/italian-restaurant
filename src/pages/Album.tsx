@@ -26,8 +26,6 @@ function Copyright() {
   );
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 export default function Album() {
   const { data: userData } = useQuery('test', () => get<any>('/api/hello'));
   const { mutateAsync } = useMutation(() => post('/api/hello', {}));

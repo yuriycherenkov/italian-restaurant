@@ -37,5 +37,6 @@ module.exports = {
     'react/prop-types': 0,
     'no-empty-pattern': 0,
     'react/react-in-jsx-scope': 0,
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },
 };

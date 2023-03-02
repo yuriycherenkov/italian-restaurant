@@ -1,6 +1,5 @@
 import { Roboto } from '@next/font/google';
 import { createTheme } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
 
 export const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -13,13 +12,31 @@ export const roboto = Roboto({
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#556cd6',
+      main: '#9155FD',
     },
     secondary: {
-      main: '#19857b',
+      main: '#8A8D93',
     },
     error: {
-      main: red.A400,
+      main: '#FF4C51',
+    },
+    warning: {
+      main: '#FFB400',
+    },
+    info: {
+      main: '#16B1FF',
+    },
+    success: {
+      main: '#56CA00',
+    },
+    text: {
+      primary: 'rgba(58, 53, 65, 0.87)',
+      secondary: 'rgba(58, 53, 65, 0.68)',
+      disabled: 'rgba(58, 53, 65, 0.38)',
+    },
+    background: {
+      default: 'rgba(244, 245, 250, 1)',
+      paper: 'rgba(255, 255, 255, 1)',
     },
   },
   typography: {

@@ -3,7 +3,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '../../../lib/prisma';
-// import { checkPassword } from '@/lib/password';
+import { checkPassword } from '@/lib/password';
 
 const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, authOptions);
 
@@ -23,23 +23,23 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials) return null;
 
-        // const existingUser = await prisma.user.findFirst({
-        //   where: { email: credentials?.email },
-        // });
+        const existingUser = await prisma.user.findFirst({
+          where: { email: credentials?.email },
+        });
 
-        // if (!existingUser) {
-        //   return null;
-        // }
-        // const { password, id, ...userData } = existingUser;
-        // const isPasswordCorrect = await checkPassword(credentials.password, password);
+        if (!existingUser) {
+          return null;
+        }
+        const { password, id, ...userData } = existingUser;
+        const isPasswordCorrect = await checkPassword(credentials.password, password);
 
-        // if (isPasswordCorrect) {
-        //   return {
-        //     ...userData,
-        //     id: id.toString(),
-        //     csrfToken: credentials?.csrfToken,
-        //   };
-        // }
+        if (isPasswordCorrect) {
+          return {
+            ...userData,
+            id: id.toString(),
+            csrfToken: credentials?.csrfToken,
+          };
+        }
 
         return null;
       },

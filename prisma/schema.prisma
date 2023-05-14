@@ -17,37 +17,83 @@ model User {
   password String
   firstName String
   lastName String
-  roleId Int
-  role Role  @relation(fields: [roleId], references: [id])
+  role Role  @default(WORKER)
 }
 
-model Role {
-  id Int  @id @default(autoincrement())
-  title String
-  description String?
-  permissions Permission[]
-  users User[]
+enum Role {
+  VISITOR
+  WORKER
+  MANAGER
 }
 
-model Permission {
+model RestaurantMenu {
+  id String @id @default(uuid())
+  version Int
+  items MenuItem[]
+  createdAt DateTime @default(now())
+}
+
+model MenuItem {
+  id Int @id @default(autoincrement())
+  menuId String
+  dishId Int
+  restaurantMenu RestaurantMenu @relation(fields: [menuId], references: [id])
+  dish Dish @relation(fields: [dishId], references: [id])
+  orders OrderDetails[]
+  categoryId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  price Float @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Dish {
   id Int @id @default(autoincrement())
   title String
-  description String?
-  roles Role[]
+  description String
+
+  items MenuItem[]
+  kcal Int?
+  image Bytes?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Category {
+  id  Int @id
+  title String
+  description String
+  items MenuItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Order {
-  id String @id
-  createdAt DateTime
-  orderItems OrderItem[]
-  status OrderStatus
-  tokenNumber Int
+  id String @id @default(uuid())
+  orderDetaild OrderDetails[]
+  status OrderStatus @default(PENDING)
+  bill Bill?
+  tokenId Int
+  token Token @relation(fields: [tokenId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
-model OrderItem {
+model Bill {
+  id String @id @default(uuid())
+  order Order @relation(fields: [orderId], references: [id])
+  orderId String @unique
+  createdAt DateTime
+  amount Float
+}
+
+model OrderDetails {
   id Int @id @default(autoincrement())
   orderId String
   order Order @relation(fields: [orderId], references: [id])
+  menuItemId Int
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity Int
 }
 
 enum OrderStatus {
@@ -60,8 +106,11 @@ enum OrderStatus {
 model Token {
   id Int @id
   number Int
-  status TokenStatus
+  status TokenStatus @default(AVAILABLE)
   description String
+  orders Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 enum TokenStatus {

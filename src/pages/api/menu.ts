@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/lib';
 
-const geMenuPrisma = () => {
+const getMenuPrisma = () => {
   return prisma.menuItem.findMany({
     include: {
       dish: true,
@@ -10,6 +10,6 @@ const geMenuPrisma = () => {
 };
 
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
-  const menu = await geMenuPrisma();
+  const menu = await getMenuPrisma();
   return res.status(200).json(menu);
 }

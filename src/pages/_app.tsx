@@ -7,6 +7,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import createEmotionCache from '../utils/emotionConfig/createEmotionCache';
 import theme from '../theme';
 import { SessionProvider } from 'next-auth/react';
+import { Layout } from '@/components/Layout';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -45,7 +46,9 @@ export default function App(props: AppPropsWithEMotion) {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <SessionProvider session={session}>
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </SessionProvider>
         </ThemeProvider>
       </QueryClientProvider>

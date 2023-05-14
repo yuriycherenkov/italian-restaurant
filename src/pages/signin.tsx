@@ -14,9 +14,9 @@ export default function SignInPage({ csrfToken }: InferGetServerSidePropsType<ty
       <Stack alignItems="center">
         <Image src={logo} alt="logo" width={50} />
         <Typography component="h1" variant="h5" sx={{ mt: 2 }}>
-          Welcome to booking a meeting platform! 👋🏻
+          Welcome to restaurant ordering system! 👋🏻
         </Typography>
-        <Typography sx={{ mt: 1 }}>Please sign-in to your account and start the adventure</Typography>
+        <Typography sx={{ mt: 1 }}>Please sign-in to your account</Typography>
         <SignInForm csrfToken={csrfToken} />
       </Stack>
     </Paper>
@@ -27,9 +27,9 @@ export const getServerSideProps = async (ctx: any) => {
   const session = await getSession(ctx);
 
   if (session) {
-    // return {
-    //   redirect: { destination: '/' },
-    // };
+    return {
+      redirect: { destination: '/' },
+    };
   }
 
   return {

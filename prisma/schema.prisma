@@ -10,17 +10,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
-  id          Int          @id @default(autoincrement())
-  email       String       @unique
-  firstName   String?
-  lastName    String?
-  password    String
-  role        Role         @default(WORKER)
+  id   Int   @id @default(autoincrement())
+  email String
+  password String
+  firstName String
+  lastName String
+  roleId Int
+  role Role  @relation(fields: [roleId], references: [id])
 }
 
-enum Role {
-  VISITOR
-  WORKER
-  MANAGER
+model Role {
+  id Int  @id @default(autoincrement())
+  title String
+  description String?
+  permissions Permission[]
+  users User[]
+}
+
+model Permission {
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  roles Role[]
+}
+
+model Order {
+  id String @id
+  createdAt DateTime
+  orderItems OrderItem[]
+  status OrderStatus
+  tokenNumber Int
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  READY
+  PICKED
+}
+
+model Token {
+  id Int @id
+  number Int
+  status TokenStatus
+  description String
+}
+
+enum TokenStatus {
+  AVAILABLE
+  IN_USE
+  IN_SERVICE
 }

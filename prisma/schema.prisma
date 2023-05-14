@@ -17,37 +17,79 @@ model User {
   password String
   firstName String
   lastName String
-  roleId Int
-  role Role  @relation(fields: [roleId], references: [id])
+  role Role  @default(WORKER)
 }
 
-model Role {
-  id Int  @id @default(autoincrement())
-  title String
-  description String?
-  permissions Permission[]
-  users User[]
+enum Role {
+  VISITOR
+  WORKER
+  MANAGER
 }
 
-model Permission {
+model RestaurantMenu {
+  id String @id
+  version String
+  items MenuItem[]
+  createdAt String
+}
+
+model MenuItem {
+  id Int @id @default(autoincrement())
+  menuId String
+  dishId Int
+  restaurantMenu RestaurantMenu @relation(fields: [menuId], references: [id])
+  dish Dish @relation(fields: [dishId], references: [id])
+  orders OrderDetails[]
+  createdAt DateTime
+  updatedAt DateTime
+}
+
+model Dish {
   id Int @id @default(autoincrement())
   title String
-  description String?
-  roles Role[]
+  description String
+  categoryId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  items MenuItem[]
+  createdAt DateTime
+  updatedAt DateTime
+}
+
+model Category {
+  id  Int @id
+  title String
+  description String
+  items Dish[]
+  createdAt DateTime
+  updatedAt DateTime
 }
 
 model Order {
   id String @id
+  orderDetaild OrderDetails[]
+  status OrderStatus @default(PENDING)
+  bill Bill?
+  tokenId Int
+  token Token @relation(fields: [tokenId], references: [id])
   createdAt DateTime
-  orderItems OrderItem[]
-  status OrderStatus
-  tokenNumber Int
+  updatedAt DateTime
 }
 
-model OrderItem {
+model Bill {
+  id String @id
+  order Order @relation(fields: [orderId], references: [id])
+  orderId String @unique
+  createdAt DateTime
+  amount Int
+}
+
+model OrderDetails {
   id Int @id @default(autoincrement())
   orderId String
   order Order @relation(fields: [orderId], references: [id])
+  menuItemId Int
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity Int
 }
 
 enum OrderStatus {
@@ -60,8 +102,9 @@ enum OrderStatus {
 model Token {
   id Int @id
   number Int
-  status TokenStatus
+  status TokenStatus @default(AVAILABLE)
   description String
+  orders Order[]
 }
 
 enum TokenStatus {

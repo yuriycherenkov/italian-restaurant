@@ -1,32 +1,54 @@
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import IconButton from '@mui/material/IconButton';
+import { useCartContext } from '@/context/CartContext';
+import Image from 'next/image';
 
-const Cart: React.FC<{ card: number }> = ({ card }) => {
+const Cart: React.FC = () => {
+  const { cart, addToCart, removeFromCart, decreaseQuantity } = useCartContext();
+
   return (
-    <Grid item key={card} xs={12} sm={6} md={4}>
-      <Card>
-        <CardMedia
-          component="img"
-          image="https://images.unsplash.com/photo-1674230226985-f7d78563c90d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY3NTg2OTk1MQ&ixlib=rb-4.0.3&q=80&w=1080"
-          alt="random"
-        />
-        <CardContent sx={{ flexGrow: 1 }}>
-          <Typography gutterBottom variant="h5" component="h2">
-            Heading
-          </Typography>
-          <Typography>This is a media card. You can use this section to describe the content.</Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">View</Button>
-          <Button size="small">Edit</Button>
-        </CardActions>
-      </Card>
-    </Grid>
+    <Box sx={{ width: 500 }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="h5">Current Order</Typography>
+        <Button>Clear all</Button>
+      </Stack>
+      {cart.map(({ item, quantity }) => (
+        <Stack direction="row" alignItems="center" key={item.id}>
+          <Image src={item.dish.image || 'todo'} height={50} alt="" />
+          <Typography variant="body1">{item.dish.title}</Typography>
+
+          <IconButton
+            onClick={() => {
+              decreaseQuantity(item.id);
+            }}
+          >
+            <RemoveIcon fontSize="inherit" />
+          </IconButton>
+          <p>{item.dish.title}</p>
+          <span>{quantity}</span>
+          <IconButton
+            onClick={() => {
+              addToCart(item);
+            }}
+          >
+            <AddIcon fontSize="inherit" />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              removeFromCart(item.id);
+            }}
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
+        </Stack>
+      ))}
+    </Box>
   );
 };
 

@@ -51,10 +51,9 @@ model Dish {
   id Int @id @default(autoincrement())
   title String
   description String
-
   items MenuItem[]
   kcal Int?
-  image Bytes?
+  image String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }

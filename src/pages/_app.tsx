@@ -8,6 +8,7 @@ import createEmotionCache from '../utils/emotionConfig/createEmotionCache';
 import theme from '../theme';
 import { SessionProvider } from 'next-auth/react';
 import { Layout } from '@/components/Layout';
+import { CartContextProvider } from '@/context/CartContext';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -46,9 +47,11 @@ export default function App(props: AppPropsWithEMotion) {
           {/* Providers */}
           <CssBaseline />
           <SessionProvider session={session}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <CartContextProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </CartContextProvider>
           </SessionProvider>
         </ThemeProvider>
       </QueryClientProvider>

@@ -43,7 +43,7 @@ export default function App(props: AppPropsWithEMotion) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          {/* Providers */}
           <CssBaseline />
           <SessionProvider session={session}>
             <Layout>

@@ -6,16 +6,16 @@ import CardMedia from '@mui/material/CardMedia';
 // import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-interface MenuItemProps {
+interface DishItemProps {
   title: string;
   shortDescription: string;
   price: number;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ title, shortDescription, price }) => {
+const DishItem: React.FC<DishItemProps> = ({ title, shortDescription, price }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image="/static/images/cards/contemplative-reptile.jpg" title="green iguana" />
+      <CardMedia sx={{ height: 140 }} image="https://mui.com/static/images/cards/paella.jpg" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
@@ -35,4 +35,4 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, shortDescription, price }) =
   );
 };
 
-export default MenuItem;
+export default DishItem;

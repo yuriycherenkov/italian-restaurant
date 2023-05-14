@@ -1,7 +1,10 @@
 import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 
-const pages = [{ title: 'Orders', href: '/orders' }];
+const pages = [
+  { title: 'Orders', href: '/orders' },
+  { title: 'Menu', href: '/menu' },
+];
 
 export const AuthUserNav = () => {
   return (

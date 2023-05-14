@@ -1,11 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-// import { prisma } from '@/lib';
+import { prisma } from '@/lib';
 
-// const geMenuPrisma = () => {
-//   prisma.
-// }
+const geMenuPrisma = () => {
+  return prisma.menuItem.findMany({
+    include: {
+      dish: true,
+    },
+  });
+};
 
-export default function handler(_req: NextApiRequest, res: NextApiResponse) {
-  // const gotMenu =
-  return res.status(200).json([]);
+export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
+  const menu = await geMenuPrisma();
+  return res.status(200).json(menu);
 }

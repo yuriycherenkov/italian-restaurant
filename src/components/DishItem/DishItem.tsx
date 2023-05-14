@@ -9,10 +9,11 @@ import Typography from '@mui/material/Typography';
 interface DishItemProps {
   title: string;
   shortDescription: string;
+  image: string;
   price: number;
 }
 
-const DishItem: React.FC<DishItemProps> = ({ title, shortDescription, price }) => {
+const DishItem: React.FC<DishItemProps> = ({ title, shortDescription, price, image: _image }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia sx={{ height: 140 }} image="https://mui.com/static/images/cards/paella.jpg" />

@@ -27,10 +27,10 @@ enum Role {
 }
 
 model RestaurantMenu {
-  id String @id
-  version String
+  id String @id @default(uuid())
+  version Int
   items MenuItem[]
-  createdAt String
+  createdAt DateTime @default(now())
 }
 
 model MenuItem {
@@ -40,47 +40,51 @@ model MenuItem {
   restaurantMenu RestaurantMenu @relation(fields: [menuId], references: [id])
   dish Dish @relation(fields: [dishId], references: [id])
   orders OrderDetails[]
-  createdAt DateTime
-  updatedAt DateTime
+  categoryId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  price Float @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Dish {
   id Int @id @default(autoincrement())
   title String
   description String
-  categoryId Int
-  category Category @relation(fields: [categoryId], references: [id])
+
   items MenuItem[]
-  createdAt DateTime
-  updatedAt DateTime
+  kcal Int?
+  image Bytes?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Category {
   id  Int @id
   title String
   description String
-  items Dish[]
-  createdAt DateTime
-  updatedAt DateTime
+  items MenuItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Order {
-  id String @id
+  id String @id @default(uuid())
   orderDetaild OrderDetails[]
   status OrderStatus @default(PENDING)
   bill Bill?
   tokenId Int
   token Token @relation(fields: [tokenId], references: [id])
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Bill {
-  id String @id
+  id String @id @default(uuid())
   order Order @relation(fields: [orderId], references: [id])
   orderId String @unique
   createdAt DateTime
-  amount Int
+  amount Float
 }
 
 model OrderDetails {
@@ -105,6 +109,8 @@ model Token {
   status TokenStatus @default(AVAILABLE)
   description String
   orders Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 enum TokenStatus {

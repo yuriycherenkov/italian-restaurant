@@ -69,7 +69,7 @@ model Category {
 
 model Order {
   id String @id @default(uuid())
-  orderDetaild OrderDetails[]
+  orderDetails OrderDetails[]
   status OrderStatus @default(PENDING)
   bill Bill?
   tokenId Int
@@ -103,10 +103,10 @@ enum OrderStatus {
 }
 
 model Token {
-  id Int @id
+  id Int @id @default(autoincrement())
   number Int
   status TokenStatus @default(AVAILABLE)
-  description String
+  description String?
   orders Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

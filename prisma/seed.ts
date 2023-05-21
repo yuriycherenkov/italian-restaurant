@@ -36,11 +36,27 @@ const USERS = [
   },
 ];
 
+const TOKENS = Array.from({ length: 20 }, (_, index) => ({ number: index + 1 }));
+
+const ORDERS = Array.from({ length: 10 }, (_, index) => ({ tokenId: index + 1 }));
+
 async function main() {
   for (const user of USERS) {
     const password = await encodePassword('123');
     await prisma.user.create({
       data: { ...user, password },
+    });
+  }
+
+  for (const token of TOKENS) {
+    await prisma.token.create({
+      data: { ...token },
+    });
+  }
+
+  for (const order of ORDERS) {
+    await prisma.order.create({
+      data: { ...order },
     });
   }
 }

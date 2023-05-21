@@ -1,12 +1,13 @@
+import { GET_MENU } from '@/constants/reactQueryKeys';
 import { MenuItem } from '@/entitiesTypes';
-import { get } from '@/servise/fetch';
+import { get } from '@/service/fetch';
 import { useQuery } from 'react-query';
 
 const getMenu = async () => get<MenuItem[]>('/api/menu');
 
 const useMenu = () => {
   return useQuery({
-    queryKey: ['get-Menu'],
+    queryKey: [GET_MENU],
     queryFn: () => getMenu(),
   });
 };

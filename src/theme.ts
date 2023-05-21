@@ -1,4 +1,5 @@
 import { Roboto } from '@next/font/google';
+import type {} from '@mui/lab/themeAugmentation';
 import { createTheme } from '@mui/material/styles';
 
 export const roboto = Roboto({

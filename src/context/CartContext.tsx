@@ -8,6 +8,7 @@ type CartContext = {
   addToCart: (_item: MenuItem) => void;
   removeFromCart: (_itemId: number) => void;
   decreaseQuantity: (_itemId: number) => void;
+  clearAll: () => void;
 };
 
 const CartContext = createContext<CartContext | null>(null);
@@ -46,9 +47,13 @@ export const CartContextProvider: React.FC<{ children: any }> = ({ children }) =
     [cart]
   );
 
+  const clearAll = useCallback(() => {
+    setCartState([]);
+  }, []);
+
   const contextValue = useMemo(
-    () => ({ cart, addToCart, removeFromCart, decreaseQuantity }),
-    [cart, addToCart, removeFromCart, decreaseQuantity]
+    () => ({ cart, addToCart, removeFromCart, decreaseQuantity, clearAll }),
+    [cart, addToCart, removeFromCart, decreaseQuantity, clearAll]
   );
 
   return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;

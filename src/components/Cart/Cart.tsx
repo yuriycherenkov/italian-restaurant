@@ -10,17 +10,17 @@ import { useCartContext } from '@/context/CartContext';
 import Image from 'next/image';
 
 const Cart: React.FC = () => {
-  const { cart, addToCart, removeFromCart, decreaseQuantity } = useCartContext();
+  const { cart, addToCart, removeFromCart, decreaseQuantity, clearAll } = useCartContext();
 
   return (
     <Box sx={{ width: 500 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h5">Current Order</Typography>
-        <Button>Clear all</Button>
+        <Button onClick={() => clearAll()}>Clear all</Button>
       </Stack>
       {cart.map(({ item, quantity }) => (
         <Stack direction="row" alignItems="center" key={item.id}>
-          <Image src={item.dish.image || 'todo'} height={50} alt="" />
+          <Image src={item.dish.image || 'todo'} height={60} alt="" width={60} />
           <Typography variant="body1">{item.dish.title}</Typography>
 
           <IconButton

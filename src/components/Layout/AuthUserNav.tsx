@@ -1,19 +1,20 @@
 import { Box, Button } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
-const pages = [
-  { title: 'Orders', href: '/orders' },
-  { title: 'Menu', href: '/menu' },
-];
+const pages = [{ title: 'Orders', href: 'dashboard/orders' }];
 
 export const AuthUserNav = () => {
+  const { data: session } = useSession();
+
   return (
     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, ml: 2 }}>
-      {pages.map((page) => (
-        <Button key={page.title} href={page.href} component={Link}>
-          {page.title}
-        </Button>
-      ))}
+      {session?.user?.email &&
+        pages.map((page) => (
+          <Button key={page.title} href={page.href} component={Link}>
+            {page.title}
+          </Button>
+        ))}
     </Box>
   );
 };

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,14 +7,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id   Int   @id @default(autoincrement())
-  email String
-  password String
+  id        Int    @id @default(autoincrement())
+  email     String
   firstName String
-  lastName String
-  role Role  @default(WORKER)
+  lastName  String
+  password  String
+  role      Role   @default(WORKER)
+}
+
+model RestaurantMenu {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  version   Int
+  items     MenuItem[]
+}
+
+model MenuItem {
+  id             Int            @id @default(autoincrement())
+  menuId         String
+  dishId         Int
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now())
+  categoryId     Int
+  price          Float          @default(0)
+  category       Category       @relation(fields: [categoryId], references: [id])
+  dish           Dish           @relation(fields: [dishId], references: [id])
+  restaurantMenu RestaurantMenu @relation(fields: [menuId], references: [id])
+  orders         OrderDetails[]
+}
+
+model Dish {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+  image       String?
+  kcal        Int?
+  items       MenuItem[]
+}
+
+model Category {
+  id          Int        @id
+  title       String
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+  items       MenuItem[]
+}
+
+model Order {
+  id           String         @id @default(uuid())
+  status       OrderStatus    @default(PENDING)
+  tokenId      Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
+  bill         Bill?
+  token        Token          @relation(fields: [tokenId], references: [id])
+  orderDetails OrderDetails[]
+}
+
+model Bill {
+  id        String   @id @default(uuid())
+  orderId   String   @unique
+  createdAt DateTime
+  amount    Float
+  order     Order    @relation(fields: [orderId], references: [id])
+}
+
+model OrderDetails {
+  id         Int      @id @default(autoincrement())
+  orderId    String
+  menuItemId Int
+  quantity   Int
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  order      Order    @relation(fields: [orderId], references: [id])
+}
+
+model Token {
+  id          Int         @id @default(autoincrement())
+  number      Int
+  status      TokenStatus @default(AVAILABLE)
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+  orders      Order[]
 }
 
 enum Role {
@@ -26,90 +101,11 @@ enum Role {
   MANAGER
 }
 
-model RestaurantMenu {
-  id String @id @default(uuid())
-  version Int
-  items MenuItem[]
-  createdAt DateTime @default(now())
-}
-
-model MenuItem {
-  id Int @id @default(autoincrement())
-  menuId String
-  dishId Int
-  restaurantMenu RestaurantMenu @relation(fields: [menuId], references: [id])
-  dish Dish @relation(fields: [dishId], references: [id])
-  orders OrderDetails[]
-  categoryId Int
-  category Category @relation(fields: [categoryId], references: [id])
-  price Float @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-}
-
-model Dish {
-  id Int @id @default(autoincrement())
-  title String
-  description String
-  items MenuItem[]
-  kcal Int?
-  image String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-}
-
-model Category {
-  id  Int @id
-  title String
-  description String
-  items MenuItem[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-}
-
-model Order {
-  id String @id @default(uuid())
-  orderDetails OrderDetails[]
-  status OrderStatus @default(PENDING)
-  bill Bill?
-  tokenId Int
-  token Token @relation(fields: [tokenId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-}
-
-model Bill {
-  id String @id @default(uuid())
-  order Order @relation(fields: [orderId], references: [id])
-  orderId String @unique
-  createdAt DateTime
-  amount Float
-}
-
-model OrderDetails {
-  id Int @id @default(autoincrement())
-  orderId String
-  order Order @relation(fields: [orderId], references: [id])
-  menuItemId Int
-  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
-  quantity Int
-}
-
 enum OrderStatus {
   PENDING
   PROCESSING
   READY
   PICKED
-}
-
-model Token {
-  id Int @id @default(autoincrement())
-  number Int
-  status TokenStatus @default(AVAILABLE)
-  description String?
-  orders Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
 }
 
 enum TokenStatus {

@@ -11,6 +11,13 @@ import Paper from '@mui/material/Paper';
 import { useCartContext } from '@/context/CartContext';
 import { styled } from '@mui/material/styles';
 import { PaymentRadio } from '../PaymentRadio';
+import { PAYMENT_METHOD } from '../PaymentRadio/constants';
+import TextField from '@mui/material/TextField';
+import { useFormik } from 'formik';
+import { validationSchemaOrder } from '../SignInForm/validation';
+import { getToken } from './getToken';
+import { useState } from 'react';
+import { AlertComponent } from '../AlertComponent';
 
 const StackStyled = styled(Stack)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -18,16 +25,47 @@ const StackStyled = styled(Stack)(({ theme }) => ({
 }));
 
 const PaperStyled = styled(Paper)(() => ({
-  // backgroundColor: theme.palette.info.light,
   backgroundColor: '#00D9D9',
   color: '#fff',
 }));
 
+const radioValues = [PAYMENT_METHOD.CART, PAYMENT_METHOD.CASH];
+
 const Cart: React.FC = () => {
+  const [tokenIDError, setError] = useState('');
+
   const { cart, addToCart, removeFromCart, decreaseQuantity, clearAll, totalPrice } = useCartContext();
+  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+    initialValues: {
+      tokenId: '',
+      paymentMethod: PAYMENT_METHOD.CART,
+    },
+    validationSchema: validationSchemaOrder,
+    onSubmit: async (values) => {
+      setError('');
+
+      try {
+        // TODO: do we need this?
+        // eslint-disable-next-line no-unused-vars
+        const res = await getToken(values.tokenId);
+      } catch (error: any) {
+        setError(error?.response?.data?.error);
+      }
+
+      // TODO: make order if no errors
+    },
+  });
 
   return (
-    <Box sx={{ width: 600, p: 2 }}>
+    <Box
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit(e);
+      }}
+      noValidate
+      sx={{ width: 600, p: 2 }}
+    >
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
         <Typography variant="h5">Current Order</Typography>
         <Button onClick={() => clearAll()}>Clear all</Button>
@@ -54,6 +92,7 @@ const Cart: React.FC = () => {
 
             <Stack direction="row" alignItems="center" sx={{ mr: 2 }}>
               <IconButton
+                disabled={quantity <= 1}
                 onClick={() => {
                   decreaseQuantity(item.id);
                 }}
@@ -99,11 +138,37 @@ const Cart: React.FC = () => {
           <Typography variant="h5">Payment Method</Typography>
         </Stack>
       </Box>
-
-      <PaymentRadio />
+      <PaymentRadio onClickHandler={handleChange} values={radioValues} name="paymentMethod" />
+      <TextField
+        id="tokenId"
+        label="please enter token ID"
+        name="tokenId"
+        onChange={handleChange}
+        value={values.tokenId}
+        required
+        fullWidth
+        autoFocus
+        error={Boolean(errors.tokenId && touched.tokenId)}
+        autoComplete="token-id"
+        helperText={errors.tokenId}
+        margin="normal"
+        sx={{ mb: 2 }}
+      />
+      <AlertComponent
+        hasError={!!tokenIDError}
+        severity="error"
+        resetError={() => setError('')}
+        message={tokenIDError}
+        sx={{ mb: 2 }}
+      />
 
       <Box sx={{ width: '100%', mb: 5 }}>
-        <Button onClick={() => console.log('submit')} variant="contained" sx={{ p: 2, width: '100%' }}>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ p: 2, width: '100%' }}
+          disabled={!cart.length || !!Object.keys(errors).length}
+        >
           Make an order
         </Button>
       </Box>

@@ -20,7 +20,7 @@ const getOrdersPrisma = () => {
   });
 };
 
-const createOrderPrisma = (orderInfo: unknown) => {
+const createOrderPrisma = async (orderInfo: unknown) => {
   // To Do
   console.log(orderInfo);
 };

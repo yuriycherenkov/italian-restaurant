@@ -38,15 +38,20 @@ const AppBar: React.FC = () => {
           Italiano
         </Typography>
         <AuthUserNav />
-        {session?.user?.email && <Identity user={session.user.email} />}
-        <IconButton onClick={toggleDrawer}>
-          <Badge badgeContent={addedToCartLength} color="primary">
-            <ShoppingBasketIcon />
-          </Badge>
-        </IconButton>
-        <Drawer anchor="right" open={isOpen} onClose={toggleDrawer}>
-          <Cart />
-        </Drawer>
+        {session?.user?.email ? (
+          <Identity user={session.user.email} />
+        ) : (
+          <>
+            <IconButton onClick={toggleDrawer}>
+              <Badge badgeContent={addedToCartLength} color="primary">
+                <ShoppingBasketIcon />
+              </Badge>
+            </IconButton>
+            <Drawer anchor="right" open={isOpen} onClose={toggleDrawer}>
+              <Cart />
+            </Drawer>
+          </>
+        )}
       </Toolbar>
     </MuiAppBar>
   );

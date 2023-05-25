@@ -2,7 +2,10 @@ import { Box, Button } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
-const pages = [{ title: 'Orders', href: 'dashboard/orders' }];
+const pages = [
+  { title: 'Orders', href: '/dashboard/orders' },
+  { title: 'Statistics', href: '/dashboard/statistics' },
+];
 
 export const AuthUserNav = () => {
   const { data: session } = useSession();

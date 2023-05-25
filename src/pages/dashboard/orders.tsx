@@ -2,10 +2,10 @@ import * as React from 'react';
 import Masonry from '@mui/lab/Masonry';
 import OrderCard from '@/components/OrderCard/OrderCard';
 import Grid from '@mui/material/Grid';
-import { useOrders } from '@/hooks/useOrders';
+import useCurrentOrders from '@/hooks/useOrders/useCurrentOrders';
 
-export default function BasicMasonry() {
-  const { data: orders } = useOrders();
+export default function Orders() {
+  const { data: orders } = useCurrentOrders();
   if (!orders) return 'Loading...';
 
   if (!orders.length) return 'No orders';

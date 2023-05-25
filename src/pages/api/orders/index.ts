@@ -5,9 +5,6 @@ import { onError } from '../../../utils/onError';
 
 const getOrdersPrisma = () => {
   return prisma.order.findMany({
-    where: {
-      NOT: { status: 'PICKED' },
-    },
     include: {
       orderDetails: {
         include: {

@@ -1,13 +1,14 @@
-import { Alert, AlertColor } from '@mui/material';
+import { Alert, AlertColor, SxProps, Theme } from '@mui/material';
 
 const AlertComponent: React.FC<{
+  sx?: SxProps<Theme>;
   hasError: boolean;
   message: string;
   severity: AlertColor;
   resetError: (_: boolean) => void;
-}> = ({ hasError, message, severity, resetError }) => {
+}> = ({ sx = {}, hasError, message, severity, resetError }) => {
   return hasError ? (
-    <Alert onClose={() => resetError(false)} severity={severity} sx={{ width: '100%' }}>
+    <Alert onClose={() => resetError(false)} severity={severity} sx={{ width: '100%', ...sx }}>
       {message}
     </Alert>
   ) : null;

@@ -35,45 +35,39 @@ const RadioGroupStyled = styled(RadioGroup)(({ theme }) => ({
   },
 }));
 
-interface ValuesProps {
-  name: string;
-  value: string;
-}
-
 interface PaymentRadioProps {
   onClickHandler: (_event: MouseEvent<HTMLLabelElement>) => void;
-  values: ValuesProps[];
+  name: string;
+  values: string[];
 }
 
-const PaymentRadio: React.FC<PaymentRadioProps> = ({ onClickHandler, values }) => {
+const PaymentRadio: React.FC<PaymentRadioProps> = ({ onClickHandler, values, name }) => {
   return (
     <>
-      <RadioGroupStyled defaultValue={values[0].value} row sx={{ mb: 5 }}>
+      <RadioGroupStyled defaultValue={values[0]} name={name} row sx={{ mb: 5 }}>
         <FormControlLabel
-          value={values[0].value}
+          value={values[0]}
           control={<Radio />}
-          name={values[0].name}
           onClick={onClickHandler}
           label={
             <>
               <SvgIcon component={AttachMoneyIcon} viewBox="0 0 24 24" sx={{ mr: 2 }} />
               <Typography variant="body1" sx={{ fontSize: 20 }}>
-                {values[0].value}
+                {values[0]}
               </Typography>
             </>
           }
         />
         <FormControlLabel
-          value={values[1].value}
+          value={values[1]}
           control={<Radio />}
-          name={values[1].name}
           onClick={onClickHandler}
           label={
             <>
               <SvgIcon component={CreditCardIcon} viewBox="0 0 24 24" sx={{ mr: 2 }} />
 
               <Typography variant="body1" sx={{ fontSize: 20 }}>
-                {values[1].value}
+                {values[1]}
               </Typography>
             </>
           }

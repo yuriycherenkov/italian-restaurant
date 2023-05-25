@@ -15,6 +15,9 @@ import { PAYMENT_METHOD } from '../PaymentRadio/constants';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 import { validationSchemaOrder } from '../SignInForm/validation';
+import { getToken } from './getToken';
+import { useState } from 'react';
+import { AlertComponent } from '../AlertComponent';
 
 const StackStyled = styled(Stack)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -26,31 +29,32 @@ const PaperStyled = styled(Paper)(() => ({
   color: '#fff',
 }));
 
+const radioValues = [PAYMENT_METHOD.CART, PAYMENT_METHOD.CASH];
+
 const Cart: React.FC = () => {
+  const [tokenIDError, setError] = useState('');
+
   const { cart, addToCart, removeFromCart, decreaseQuantity, clearAll, totalPrice } = useCartContext();
-  const {
-    handleSubmit,
-    handleChange,
-    values: { tokenId, nameOptionOne, nameOptionTwo },
-    errors,
-    touched,
-  } = useFormik({
+  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
     initialValues: {
       tokenId: '',
-      nameOptionOne: PAYMENT_METHOD.CART,
-      nameOptionTwo: PAYMENT_METHOD.CASH,
+      paymentMethod: PAYMENT_METHOD.CART,
     },
     validationSchema: validationSchemaOrder,
-    onSubmit: ({ tokenId }) => {
-      console.log(' submit ', tokenId);
+    onSubmit: async (values) => {
+      setError('');
+
+      try {
+        // TODO: do we need this?
+        // eslint-disable-next-line no-unused-vars
+        const res = await getToken(values.tokenId);
+      } catch (error: any) {
+        setError(error?.response?.data?.error);
+      }
+
+      // TODO: make order if no errors
     },
   });
-
-  const handleOnChange = (event: any) => {
-    console.log(event.target.value, event.target.checked);
-
-    handleChange(event);
-  };
 
   return (
     <Box
@@ -134,42 +138,36 @@ const Cart: React.FC = () => {
           <Typography variant="h5">Payment Method</Typography>
         </Stack>
       </Box>
-
-      <PaymentRadio
-        onClickHandler={handleOnChange}
-        values={[
-          {
-            name: 'radioGroup',
-            value: nameOptionOne,
-          },
-          {
-            name: 'radioGroup',
-            value: nameOptionTwo,
-          },
-        ]}
+      <PaymentRadio onClickHandler={handleChange} values={radioValues} name="paymentMethod" />
+      <TextField
+        id="tokenId"
+        label="please enter token ID"
+        name="tokenId"
+        onChange={handleChange}
+        value={values.tokenId}
+        required
+        fullWidth
+        autoFocus
+        error={Boolean(errors.tokenId && touched.tokenId)}
+        autoComplete="token-id"
+        helperText={errors.tokenId}
+        margin="normal"
+        sx={{ mb: 2 }}
+      />
+      <AlertComponent
+        hasError={!!tokenIDError}
+        severity="error"
+        resetError={() => setError('')}
+        message={tokenIDError}
+        sx={{ mb: 2 }}
       />
 
-      {nameOptionOne === PAYMENT_METHOD.CART && (
-        <TextField
-          id="tokenId"
-          label="tokenId"
-          name="tokenId"
-          onChange={handleChange}
-          value={tokenId}
-          required
-          fullWidth
-          autoFocus
-          error={Boolean(errors.tokenId && touched.tokenId)}
-          helperText={errors.tokenId}
-          margin="normal"
-        />
-      )}
       <Box sx={{ width: '100%', mb: 5 }}>
         <Button
-          onClick={() => console.log('submit')}
+          type="submit"
           variant="contained"
           sx={{ p: 2, width: '100%' }}
-          disabled={!cart.length}
+          disabled={!cart.length || !!Object.keys(errors).length}
         >
           Make an order
         </Button>

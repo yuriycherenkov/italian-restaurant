@@ -6,7 +6,6 @@ export const validationSchema = Yup.object({
 });
 
 export const validationSchemaOrder = Yup.object({
-  tokenId: Yup.string().required('Please enter token ID'),
-  optionCash: Yup.string().optional(),
-  nameOptionTwo: Yup.string().optional(),
+  tokenId: Yup.number().required('Please enter token ID'),
+  paymentMethod: Yup.string().required('Please select payment method'),
 });

@@ -11,6 +11,10 @@ import Paper from '@mui/material/Paper';
 import { useCartContext } from '@/context/CartContext';
 import { styled } from '@mui/material/styles';
 import { PaymentRadio } from '../PaymentRadio';
+import { PAYMENT_METHOD } from '../PaymentRadio/constants';
+import TextField from '@mui/material/TextField';
+import { useFormik } from 'formik';
+import { validationSchemaOrder } from '../SignInForm/validation';
 
 const StackStyled = styled(Stack)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -18,16 +22,46 @@ const StackStyled = styled(Stack)(({ theme }) => ({
 }));
 
 const PaperStyled = styled(Paper)(() => ({
-  // backgroundColor: theme.palette.info.light,
   backgroundColor: '#00D9D9',
   color: '#fff',
 }));
 
 const Cart: React.FC = () => {
   const { cart, addToCart, removeFromCart, decreaseQuantity, clearAll, totalPrice } = useCartContext();
+  const {
+    handleSubmit,
+    handleChange,
+    values: { tokenId, nameOptionOne, nameOptionTwo },
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: {
+      tokenId: '',
+      nameOptionOne: PAYMENT_METHOD.CART,
+      nameOptionTwo: PAYMENT_METHOD.CASH,
+    },
+    validationSchema: validationSchemaOrder,
+    onSubmit: ({ tokenId }) => {
+      console.log(' submit ', tokenId);
+    },
+  });
+
+  const handleOnChange = (event: any) => {
+    console.log(event.target.value, event.target.checked);
+
+    handleChange(event);
+  };
 
   return (
-    <Box sx={{ width: 600, p: 2 }}>
+    <Box
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit(e);
+      }}
+      noValidate
+      sx={{ width: 600, p: 2 }}
+    >
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
         <Typography variant="h5">Current Order</Typography>
         <Button onClick={() => clearAll()}>Clear all</Button>
@@ -54,6 +88,7 @@ const Cart: React.FC = () => {
 
             <Stack direction="row" alignItems="center" sx={{ mr: 2 }}>
               <IconButton
+                disabled={quantity <= 1}
                 onClick={() => {
                   decreaseQuantity(item.id);
                 }}
@@ -100,10 +135,42 @@ const Cart: React.FC = () => {
         </Stack>
       </Box>
 
-      <PaymentRadio />
+      <PaymentRadio
+        onClickHandler={handleOnChange}
+        values={[
+          {
+            name: 'radioGroup',
+            value: nameOptionOne,
+          },
+          {
+            name: 'radioGroup',
+            value: nameOptionTwo,
+          },
+        ]}
+      />
 
+      {nameOptionOne === PAYMENT_METHOD.CART && (
+        <TextField
+          id="tokenId"
+          label="tokenId"
+          name="tokenId"
+          onChange={handleChange}
+          value={tokenId}
+          required
+          fullWidth
+          autoFocus
+          error={Boolean(errors.tokenId && touched.tokenId)}
+          helperText={errors.tokenId}
+          margin="normal"
+        />
+      )}
       <Box sx={{ width: '100%', mb: 5 }}>
-        <Button onClick={() => console.log('submit')} variant="contained" sx={{ p: 2, width: '100%' }}>
+        <Button
+          onClick={() => console.log('submit')}
+          variant="contained"
+          sx={{ p: 2, width: '100%' }}
+          disabled={!cart.length}
+        >
           Make an order
         </Button>
       </Box>

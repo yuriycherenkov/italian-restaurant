@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { MouseEvent } from 'react';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -35,35 +35,51 @@ const RadioGroupStyled = styled(RadioGroup)(({ theme }) => ({
   },
 }));
 
-const PaymentRadio = () => {
-  return (
-    <RadioGroupStyled defaultValue="Cash" row sx={{ mb: 5 }}>
-      <FormControlLabel
-        value="Cash"
-        control={<Radio />}
-        label={
-          <>
-            <SvgIcon component={AttachMoneyIcon} viewBox="0 0 24 24" sx={{ mr: 2 }} />
-            <Typography variant="body1" sx={{ fontSize: 20 }}>
-              Cash
-            </Typography>
-          </>
-        }
-      />
-      <FormControlLabel
-        value="Cart"
-        control={<Radio />}
-        label={
-          <>
-            <SvgIcon component={CreditCardIcon} viewBox="0 0 24 24" sx={{ mr: 2 }} />
+interface ValuesProps {
+  name: string;
+  value: string;
+}
 
-            <Typography variant="body1" sx={{ fontSize: 20 }}>
-              Cart
-            </Typography>
-          </>
-        }
-      />
-    </RadioGroupStyled>
+interface PaymentRadioProps {
+  onClickHandler: (_event: MouseEvent<HTMLLabelElement>) => void;
+  values: ValuesProps[];
+}
+
+const PaymentRadio: React.FC<PaymentRadioProps> = ({ onClickHandler, values }) => {
+  return (
+    <>
+      <RadioGroupStyled defaultValue={values[0].value} row sx={{ mb: 5 }}>
+        <FormControlLabel
+          value={values[0].value}
+          control={<Radio />}
+          name={values[0].name}
+          onClick={onClickHandler}
+          label={
+            <>
+              <SvgIcon component={AttachMoneyIcon} viewBox="0 0 24 24" sx={{ mr: 2 }} />
+              <Typography variant="body1" sx={{ fontSize: 20 }}>
+                {values[0].value}
+              </Typography>
+            </>
+          }
+        />
+        <FormControlLabel
+          value={values[1].value}
+          control={<Radio />}
+          name={values[1].name}
+          onClick={onClickHandler}
+          label={
+            <>
+              <SvgIcon component={CreditCardIcon} viewBox="0 0 24 24" sx={{ mr: 2 }} />
+
+              <Typography variant="body1" sx={{ fontSize: 20 }}>
+                {values[1].value}
+              </Typography>
+            </>
+          }
+        />
+      </RadioGroupStyled>
+    </>
   );
 };
 

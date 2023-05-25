@@ -9,6 +9,7 @@ import theme from '../theme';
 import { SessionProvider } from 'next-auth/react';
 import { Layout } from '@/components/Layout';
 import { CartContextProvider } from '@/context/CartContext';
+import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -42,19 +43,21 @@ export default function App(props: AppPropsWithEMotion) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          {/* Providers */}
-          <CssBaseline />
-          <SessionProvider session={session}>
-            <CartContextProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </CartContextProvider>
-          </SessionProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            {/* Providers */}
+            <CssBaseline />
+            <SessionProvider session={session}>
+              <CartContextProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </CartContextProvider>
+            </SessionProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
     </CacheProvider>
   );
 }

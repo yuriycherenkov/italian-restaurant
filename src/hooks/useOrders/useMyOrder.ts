@@ -9,6 +9,7 @@ const useMyOrder = (id: string) => {
   return useQuery({
     queryKey: [GET_ORDERS, id],
     queryFn: () => getOrderById(id),
+    enabled: Boolean(id),
   });
 };
 

@@ -1,4 +1,4 @@
-import { OrderDetails, OrderStatus, Token } from '@prisma/client';
+import { OrderStatus, Token } from '@prisma/client';
 
 export type Dish = {
   id: number;
@@ -26,4 +26,11 @@ export type Order = {
   orderDetails: OrderDetails[];
   status: OrderStatus;
   token: Token;
+};
+
+export type OrderDetails = {
+  id: string;
+  orderId: string;
+  menuItem: MenuItem;
+  quantity: number;
 };

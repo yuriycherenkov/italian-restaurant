@@ -8,6 +8,15 @@ const getOrdersPrisma = () => {
     where: {
       NOT: { status: 'PICKED' },
     },
+    include: {
+      orderDetails: {
+        include: {
+          menuItem: {
+            include: { dish: true },
+          },
+        },
+      },
+    },
   });
 };
 

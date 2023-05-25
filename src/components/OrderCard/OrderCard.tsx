@@ -8,11 +8,12 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import { Order } from '@/entitiesTypes';
 import { OrderStatus } from '@prisma/client';
 import { useUpdateOrderStatus } from '@/hooks/useOrders';
+import { OrderDetailsList } from './OrderDetails';
 
 const STATUSES: OrderStatus[] = ['PENDING', 'PROCESSING', 'READY', 'PICKED'];
 
-const OrderCard: React.FC<Order> = (orderDetails) => {
-  const { id, status: activeStatus } = orderDetails;
+const OrderCard: React.FC<Order> = (props) => {
+  const { id, status: activeStatus, orderDetails } = props;
   const { mutate: updateOrderStatus } = useUpdateOrderStatus(id);
 
   const updateStatus = (status: OrderStatus) => {
@@ -25,6 +26,7 @@ const OrderCard: React.FC<Order> = (orderDetails) => {
         <Typography gutterBottom variant="h5" component="div">
           Order #{id}
         </Typography>
+        <OrderDetailsList orderDetails={orderDetails} />
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
         <ButtonGroup color="secondary" aria-label="order status">

@@ -5,7 +5,19 @@ import { prisma } from '@/lib';
 import { OrderStatus } from '@prisma/client';
 import type { NextApiResponseServerIO } from '../../../socketTypes';
 
-const getOrderByIdPrisma = (id: string) => prisma.order.findUnique({ where: { id } });
+const getOrderByIdPrisma = (id: string) =>
+  prisma.order.findUnique({
+    where: { id },
+    include: {
+      orderDetails: {
+        include: {
+          menuItem: {
+            include: { dish: true },
+          },
+        },
+      },
+    },
+  });
 
 const updateOrderPrisma = (id: string, status: OrderStatus) => prisma.order.update({ where: { id }, data: { status } });
 

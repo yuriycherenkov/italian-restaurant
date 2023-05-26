@@ -11,9 +11,8 @@ const getAvailableTokenById = async (id: number) => {
 
   if (token?.status === TokenStatus.AVAILABLE) {
     return { ...token, error: null };
-  } else {
-    return { error: `could not find a available token with ID ${id}` };
   }
+  return { error: `could not find an available token with ID ${id}` };
 };
 
 const getTokenById = async (req: NextApiRequest, res: NextApiResponse) => {

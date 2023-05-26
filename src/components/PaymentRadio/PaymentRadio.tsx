@@ -46,6 +46,7 @@ const PaymentRadio: React.FC<PaymentRadioProps> = ({ onClickHandler, values, nam
     <>
       <RadioGroupStyled defaultValue={values[0]} name={name} row sx={{ mb: 5 }}>
         <FormControlLabel
+          tabIndex={0}
           value={values[0]}
           control={<Radio />}
           onClick={onClickHandler}
@@ -59,6 +60,7 @@ const PaymentRadio: React.FC<PaymentRadioProps> = ({ onClickHandler, values, nam
           }
         />
         <FormControlLabel
+          tabIndex={0}
           value={values[1]}
           control={<Radio />}
           onClick={onClickHandler}

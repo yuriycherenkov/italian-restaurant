@@ -36,7 +36,7 @@ const Cart: React.FC = () => {
   const [tokenIDError, setError] = useState('');
 
   const { cart, addToCart, removeFromCart, decreaseQuantity, clearAll, totalPrice } = useCartContext();
-  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+  const { handleSubmit, handleChange, values, errors, touched, isSubmitting } = useFormik({
     initialValues: {
       tokenId: '',
       paymentMethod: PAYMENT_METHOD.CART,
@@ -53,8 +53,19 @@ const Cart: React.FC = () => {
         setError(error?.response?.data?.error);
       }
 
+      const orderCartInfo = cart.map(({ quantity, item }) => ({
+        quantity,
+        item: { id: item.id, menuId: item.menuId, dishId: item.dishId, dish: { id: item.dish.id } },
+      }));
+
       // TODO: make order if no errors
-      post('/api/orders', {});
+      await post('/api/orders', {
+        orderCartInfo,
+        paymentDetails: {
+          paymentMethod: values.paymentMethod,
+          tokenId: Number(values.tokenId),
+        },
+      });
     },
   });
 
@@ -170,7 +181,7 @@ const Cart: React.FC = () => {
           type="submit"
           variant="contained"
           sx={{ p: 2, width: '100%' }}
-          disabled={!cart.length || !!Object.keys(errors).length || !values.tokenId}
+          disabled={!cart.length || !!Object.keys(errors).length || !values.tokenId || isSubmitting}
         >
           Make an order
         </Button>

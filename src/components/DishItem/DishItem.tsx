@@ -38,7 +38,7 @@ const FlipCardFront = styled(CardMedia)({
   position: 'absolute',
   width: '100%',
   height: '100%',
-  '-webkit-backface-visibility': 'hidden', // Safari
+  WebkitBackfaceVisibility: 'hidden', // Safari
   backfaceVisibility: 'hidden',
 });
 
@@ -46,7 +46,7 @@ const FlipCardBack = styled('div')({
   position: 'absolute',
   width: '100%',
   height: '100%',
-  '-webkit-backface-visibility': 'hidden', // Safari
+  WebkitBackfaceVisibility: 'hidden', // Safari
   backfaceVisibility: 'hidden',
   backgroundColor: '#fff',
   color: '#000',

@@ -45,9 +45,44 @@ export const getOrderByIdPrisma = (id: string) =>
     },
   });
 
-export const createOrderPrisma = async (orderInfo: unknown) => {
-  // To Do
-  console.log(orderInfo);
+export const createOrderPrisma = async ({ orderCartInfo, paymentDetails }: any) => {
+  // Convert order details into Prisma compatible format
+  // [{
+  //   quantity,
+  //   item: { id: item.id, menuId: item.menuId, dishId: item.dishId, dish: { id: item.dish.id }
+  // }]
+
+  const orderDetails = orderCartInfo.map((detail) => ({
+    menuItem: {
+      connect: { id: detail.item.id },
+    },
+    quantity: detail.quantity,
+  }));
+
+  const data = {
+    token: {
+      connect: { id: paymentDetails.tokenId },
+    },
+    status: OrderStatus.PENDING,
+    // orderDetails: {
+    //   create: orderDetails,
+    // },
+  };
+
+  // return prisma.meeting.create({
+  //   data: {
+  //     ...rest,
+  //     roomId: Number(roomId),
+  //     invitations: {
+  //       create: participants.map((id) => ({
+  //         userId: Number(id),
+  //         status: InvitationStatus.PENDING,
+  //       })),
+  //     },
+  //   },
+  // });
+
+  return prisma.order.create({ data });
 };
 
 export const updateOrderPrisma = (id: string, status: OrderStatus) =>

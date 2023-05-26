@@ -29,7 +29,6 @@
     "bcryptjs": "2.4.3",
     "cloudipsp-node-js-sdk": "1.0.8",
     "formik": "2.2.9",
-    "install": "0.13.0",
     "next": "13.1.6",
     "next-auth": "4.20.1",
     "next-connect": "0.13.0",

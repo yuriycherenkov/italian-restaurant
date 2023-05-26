@@ -1,4 +1,5 @@
 import CloudIpsp from 'cloudipsp-node-js-sdk';
+import { createOrderPrisma } from '@/db/orders';
 
 interface OrderCartInfo {
   quantity: number;
@@ -22,24 +23,27 @@ interface OrderInfo {
 
 export const createOrder = async (orderInfo: OrderInfo) => {
   console.log('createOrder ', orderInfo);
+  const newOrder = await createOrderPrisma(orderInfo);
+  console.log('new order: ', newOrder);
 
-  // const fondy = new CloudIpsp({
-  //   merchantId: 1396424,
-  //   secretKey: 'test',
-  // });
+  const paymentSystem = new CloudIpsp({
+    merchantId: Number(process.env.PAYMENT_KEY),
+    secretKey: process.env.PAYMENT_SECRET as string,
+  });
 
-  const requestData = {
-    order_id: '04c105cd-49a6-4fcd-827c-f0ff830c8d60',
-    server_callback_url: 'http://localhost:3000/api/payment',
-    response_url: 'http://localhost:3000/order/04c105cd-49a6-4fcd-827c-f0ff830c8d60',
-    order_desc: 'let me try',
+  const paymentData = {
+    order_id: newOrder.id,
+    server_callback_url: `${process.env.API_URL}/api/payment`,
+    response_url: `${process.env.API_URL}/order/${newOrder.id}`,
+    order_desc: `Restaurant order #${newOrder.id}`,
     currency: 'USD',
-    amount: 10,
+    amount: 2000,
   };
-  // try {
-  //   const data = await fondy.Checkout(requestData);
-  //   console.log(data);
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  try {
+    const data = await paymentSystem.Checkout(paymentData);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };

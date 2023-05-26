@@ -77,12 +77,12 @@ model Bill {
 }
 
 model OrderDetails {
-  id         Int      @id @default(autoincrement())
   orderId    String
   menuItemId Int
   quantity   Int
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
   order      Order    @relation(fields: [orderId], references: [id])
+  @@id([orderId, menuItemId])
 }
 
 model Token {

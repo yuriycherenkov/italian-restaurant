@@ -55,17 +55,21 @@ const Cart: React.FC = () => {
 
       const orderCartInfo = cart.map(({ quantity, item }) => ({
         quantity,
-        item: { id: item.id, menuId: item.menuId, dishId: item.dishId, dish: { id: item.dish.id } },
+        itemId: item.id,
       }));
 
       // TODO: make order if no errors
-      await post('/api/orders', {
+      const result = await post('/api/orders', {
         orderCartInfo,
         paymentDetails: {
           paymentMethod: values.paymentMethod,
           tokenId: Number(values.tokenId),
         },
       });
+
+      console.log('result: ', result);
+
+      window.location.href = result.checkout_url;
     },
   });
 

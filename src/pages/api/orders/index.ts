@@ -1,26 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '@/lib';
 import nc from 'next-connect';
 import { onError } from '../../../utils/onError';
-
-const getOrdersPrisma = () => {
-  return prisma.order.findMany({
-    include: {
-      orderDetails: {
-        include: {
-          menuItem: {
-            include: { dish: true },
-          },
-        },
-      },
-    },
-  });
-};
-
-const createOrderPrisma = async (orderInfo: unknown) => {
-  // To Do
-  console.log(orderInfo);
-};
+import { getOrdersPrisma } from '@/db/orders';
+import { createOrder as createOrderManager } from '@/managers/orders';
 
 // GET /api/orders
 const getOrders = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -33,7 +15,7 @@ const getOrders = async (req: NextApiRequest, res: NextApiResponse) => {
 const createOrder = async (req: NextApiRequest, res: NextApiResponse) => {
   const orderInfo = { ...req.body };
 
-  const result = await createOrderPrisma(orderInfo);
+  const result = await createOrderManager(orderInfo);
   res.status(200).json(result);
 };
 

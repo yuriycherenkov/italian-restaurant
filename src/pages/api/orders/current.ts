@@ -1,23 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
 import { onError } from '../../../utils/onError';
-import { prisma } from '@/lib';
-
-const getCurrentOrdersPrisma = () =>
-  prisma.order.findMany({
-    where: {
-      NOT: { status: 'PICKED' },
-    },
-    include: {
-      orderDetails: {
-        include: {
-          menuItem: {
-            include: { dish: true },
-          },
-        },
-      },
-    },
-  });
+import { getCurrentOrdersPrisma } from '@/db/orders';
 
 // GET /api/orders/current
 const getCurrentOrders = async (req: NextApiRequest, res: NextApiResponse) => {

@@ -18,6 +18,7 @@ import { validationSchemaOrder } from '../SignInForm/validation';
 import { getToken } from './getToken';
 import { useState } from 'react';
 import { AlertComponent } from '../AlertComponent';
+import { post } from '@/service/fetch';
 
 const StackStyled = styled(Stack)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -53,6 +54,7 @@ const Cart: React.FC = () => {
       }
 
       // TODO: make order if no errors
+      post('/api/orders', {});
     },
   });
 

@@ -12,13 +12,14 @@ export type MenuItem = {
   id: number;
   price: number;
   dish: Dish;
-  category: Category;
+  category?: Category;
 };
 
 export type Category = {
   id: number;
   title: string;
   description: string;
+  items: MenuItem[];
 };
 
 export type Order = {

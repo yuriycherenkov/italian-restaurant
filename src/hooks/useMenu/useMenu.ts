@@ -1,9 +1,9 @@
 import { GET_MENU } from '@/constants/reactQueryKeys';
-import { MenuItem } from '@/entitiesTypes';
+import { Category } from '@/entitiesTypes';
 import { get } from '@/service/fetch';
 import { useQuery } from 'react-query';
 
-const getMenu = async () => get<MenuItem[]>('/api/menu');
+const getMenu = async () => get<Category[]>('/api/menu');
 
 const useMenu = () => {
   return useQuery({

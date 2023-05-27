@@ -1,28 +1,7 @@
 import CloudIpsp from 'cloudipsp-node-js-sdk';
-import { createOrderPrisma } from '@/db/orders';
-
-interface OrderCartInfo {
-  quantity: number;
-  item: {
-    id: number;
-    menuId: any;
-    dishId: any;
-    dish: {
-      id: number;
-    };
-  };
-}
-
-interface OrderInfo {
-  orderCartInfo: OrderCartInfo[];
-  paymentDetails: {
-    tokenId: string;
-    paymentMethod: string;
-  };
-}
+import { createOrderPrisma, type OrderInfo } from '@/db/orders';
 
 export const createOrder = async (orderInfo: OrderInfo) => {
-  console.log('createOrder ', orderInfo);
   const newOrder = await createOrderPrisma(orderInfo);
   console.log('new order: ', newOrder);
 

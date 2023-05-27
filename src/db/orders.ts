@@ -1,6 +1,19 @@
 import { prisma } from '@/lib';
 import { OrderStatus } from '@prisma/client';
 
+interface OrderCartInfo {
+  quantity: number;
+  itemId: number;
+}
+
+export interface OrderInfo {
+  orderCartInfo: OrderCartInfo[];
+  paymentDetails: {
+    tokenId: number;
+    paymentMethod: string;
+  };
+}
+
 export const getOrdersPrisma = () => {
   return prisma.order.findMany({
     include: {
@@ -45,7 +58,7 @@ export const getOrderByIdPrisma = (id: string) =>
     },
   });
 
-export const createOrderPrisma = ({ orderCartInfo, paymentDetails }: any) => {
+export const createOrderPrisma = ({ orderCartInfo, paymentDetails }: OrderInfo) => {
   const orderDetails = orderCartInfo.map((detail) => ({
     menuItem: {
       connect: { id: detail.itemId },

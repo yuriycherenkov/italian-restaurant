@@ -7,12 +7,19 @@ import { onError } from '@/utils/onError';
 const getAvailableTokenById = async (id: number) => {
   const token = await prisma.token.findUnique({
     where: { id },
+    include: {
+      orders: {
+        where: {
+          NOT: { status: 'PICKED' },
+        },
+      },
+    },
   });
 
-  if (token?.status === TokenStatus.AVAILABLE) {
-    return { ...token, error: null };
+  if (token?.status === TokenStatus.IN_SERVICE || token?.orders.length) {
+    return { error: `could not find an available token with ID ${id}` };
   }
-  return { error: `could not find an available token with ID ${id}` };
+  return { ...token, error: null };
 };
 
 const getTokenById = async (req: NextApiRequest, res: NextApiResponse) => {

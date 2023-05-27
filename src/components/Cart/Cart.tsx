@@ -46,30 +46,25 @@ const Cart: React.FC = () => {
       setError('');
 
       try {
-        // TODO: do we need this?
-        // eslint-disable-next-line no-unused-vars
-        const res = await getToken(values.tokenId);
+        await getToken(values.tokenId);
+
+        const orderCartInfo = cart.map(({ quantity, item }) => ({
+          quantity,
+          itemId: item.id,
+        }));
+
+        const result = await post('/api/orders', {
+          orderCartInfo,
+          paymentDetails: {
+            paymentMethod: values.paymentMethod,
+            tokenId: Number(values.tokenId),
+          },
+        });
+
+        window.location.href = result.checkout_url;
       } catch (error: any) {
-        setError(error?.response?.data?.error);
+        setError(error?.response?.data?.error || 'something went wrong');
       }
-
-      const orderCartInfo = cart.map(({ quantity, item }) => ({
-        quantity,
-        itemId: item.id,
-      }));
-
-      // TODO: make order if no errors
-      const result = await post('/api/orders', {
-        orderCartInfo,
-        paymentDetails: {
-          paymentMethod: values.paymentMethod,
-          tokenId: Number(values.tokenId),
-        },
-      });
-
-      console.log('result: ', result);
-
-      window.location.href = result.checkout_url;
     },
   });
 
@@ -154,7 +149,9 @@ const Cart: React.FC = () => {
       </Box>
       <Box>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="h5">Payment Method</Typography>
+          <Typography variant="h5" sx={{ width: '100%', textAlign: 'center', mb: 1 }}>
+            Payment Method
+          </Typography>
         </Stack>
       </Box>
       <PaymentRadio onClickHandler={handleChange} values={radioValues} name="paymentMethod" />

@@ -3,7 +3,6 @@ import { createOrderPrisma, type OrderInfo } from '@/db/orders';
 
 export const createOrder = async (orderInfo: OrderInfo) => {
   const newOrder = await createOrderPrisma(orderInfo);
-  console.log('new order: ', newOrder);
 
   const paymentSystem = new CloudIpsp({
     merchantId: Number(process.env.PAYMENT_KEY),

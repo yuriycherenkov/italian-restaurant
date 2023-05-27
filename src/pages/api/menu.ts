@@ -2,9 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/lib';
 
 const getMenuPrisma = () => {
-  return prisma.menuItem.findMany({
+  return prisma.category.findMany({
     include: {
-      dish: true,
+      items: {
+        include: {
+          dish: true,
+        },
+      },
     },
   });
 };

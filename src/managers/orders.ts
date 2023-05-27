@@ -15,6 +15,7 @@ export const createOrder = async (orderInfo: OrderInfo) => {
     response_url: `${process.env.API_URL}/order/${newOrder.id}`,
     order_desc: `Restaurant order #${newOrder.id}`,
     currency: 'USD',
+    // TODO: implement
     amount: 2000,
   };
   try {

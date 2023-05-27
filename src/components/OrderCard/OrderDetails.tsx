@@ -11,8 +11,11 @@ import type { OrderDetails } from '@/entitiesTypes';
 export const OrderDetailsList: React.FC<{ orderDetails: OrderDetails[] }> = ({ orderDetails }) => {
   return (
     <List>
-      {orderDetails?.map((orderItem) => (
-        <ListItem key={orderItem.id} secondaryAction={<Chip label={`x ${orderItem.quantity}`} variant="outlined" />}>
+      {orderDetails?.map((orderItem, index) => (
+        <ListItem
+          key={`${orderItem.id}_${index}`}
+          secondaryAction={<Chip label={`x ${orderItem.quantity}`} variant="outlined" />}
+        >
           <ListItemAvatar>
             <Avatar>
               <Image src={orderItem.menuItem.dish.image!} alt="" width={40} height={40} />

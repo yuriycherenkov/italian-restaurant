@@ -29,7 +29,7 @@ const FlipCardInner = styled('div')(({ flipped }: { flipped: boolean }) => ({
   width: '100%',
   height: '100%',
   textAlign: 'center',
-  transition: 'transform 0.6s',
+  transition: 'transform 0.5s',
   transformStyle: 'preserve-3d',
   transform: flipped ? 'rotateY(180deg)' : 'none',
 }));
@@ -60,7 +60,7 @@ const HoverContent = styled('div')(({ flipped }: { flipped: boolean }) => ({
   transform: 'translate(-50%, -50%)',
   opacity: 0,
   display: flipped ? 'none' : 'block',
-  transition: 'opacity 0.6s',
+  transition: 'opacity 0.5s',
   zIndex: '1',
   fontSize: 20,
   padding: 10,
@@ -94,20 +94,24 @@ const DishItem: React.FC<MenuItem> = (details) => {
           <FlipCardBack>
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
-                description:
+                Ingredients:
               </Typography>
-              <p>{description}</p>
-              <p>kcal: {kcal}</p>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                {description}
+              </Typography>
+              <Typography variant="body1">
+                <b>kcal</b> {kcal}
+              </Typography>
             </CardContent>
           </FlipCardBack>
         </FlipCardInner>
       </FlipCardContainer>
-      <CardContent>
+      <CardContent sx={{ minHeight: 105 }}>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
       </CardContent>
-      <CardActions sx={{ justifyContent: 'space-between' }}>
+      <CardActions sx={{ justifyContent: 'space-between', p: 2 }}>
         <Typography variant="body2" color="text.secondary" sx={{ fontSize: 18, fontWeight: 600 }}>
           {price} $
         </Typography>

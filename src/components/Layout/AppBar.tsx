@@ -35,7 +35,7 @@ const AppBar: React.FC = () => {
       <Toolbar sx={{ p: 2 }}>
         <Image src={logo} alt="logo" width={30} />
         <Typography variant="h6" color="primary" noWrap sx={{ ml: 2 }}>
-          Italiano
+          Trattoria Italiano
         </Typography>
         <AuthUserNav />
         {session?.user?.email ? (
@@ -44,7 +44,7 @@ const AppBar: React.FC = () => {
           <>
             <IconButton onClick={toggleDrawer}>
               <Badge badgeContent={addedToCartLength} color="primary">
-                <ShoppingBasketIcon />
+                <ShoppingBasketIcon fontSize="large" />
               </Badge>
             </IconButton>
             <Drawer anchor="right" open={isOpen} onClose={toggleDrawer}>

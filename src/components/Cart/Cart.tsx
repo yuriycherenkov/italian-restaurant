@@ -18,6 +18,7 @@ import { validationSchemaOrder } from '../SignInForm/validation';
 import { getToken } from './getToken';
 import { useState } from 'react';
 import { AlertComponent } from '../AlertComponent';
+import { post } from '@/service/fetch';
 
 const StackStyled = styled(Stack)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -35,7 +36,7 @@ const Cart: React.FC = () => {
   const [tokenIDError, setError] = useState('');
 
   const { cart, addToCart, removeFromCart, decreaseQuantity, clearAll, totalPrice } = useCartContext();
-  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+  const { handleSubmit, handleChange, values, errors, touched, isSubmitting } = useFormik({
     initialValues: {
       tokenId: '',
       paymentMethod: PAYMENT_METHOD.CART,
@@ -52,7 +53,23 @@ const Cart: React.FC = () => {
         setError(error?.response?.data?.error);
       }
 
+      const orderCartInfo = cart.map(({ quantity, item }) => ({
+        quantity,
+        itemId: item.id,
+      }));
+
       // TODO: make order if no errors
+      const result = await post('/api/orders', {
+        orderCartInfo,
+        paymentDetails: {
+          paymentMethod: values.paymentMethod,
+          tokenId: Number(values.tokenId),
+        },
+      });
+
+      console.log('result: ', result);
+
+      window.location.href = result.checkout_url;
     },
   });
 
@@ -74,8 +91,8 @@ const Cart: React.FC = () => {
         {cart.map(({ item, quantity }) => (
           <Stack direction="row" alignItems="center" key={item.id} sx={{ mb: 2 }}>
             <Stack direction="row" alignItems="center" sx={{ maxWidth: 340, width: '100%', mr: 2 }}>
-              <Paper sx={{ overflow: 'hidden', height: 60, width: '100%', maxWidth: 60, mr: 1 }}>
-                <Image src={item.dish.image || 'todo'} height={60} alt="" width={60} />
+              <Paper sx={{ overflow: 'hidden', height: 80, width: '100%', maxWidth: 80, mr: 1 }}>
+                <Image src={item.dish.image || 'todo'} height={80} alt="" width={80} />
               </Paper>
               <Typography
                 variant="h6"
@@ -129,7 +146,9 @@ const Cart: React.FC = () => {
         <PaperStyled elevation={2} sx={{ width: '100%', p: 2, mb: 5 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">Total</Typography>
-            <Typography variant="body1">{totalPrice.toFixed(2)}</Typography>
+            <Typography variant="body1" sx={{ fontSize: 26 }}>
+              {totalPrice.toFixed(2)}
+            </Typography>
           </Stack>
         </PaperStyled>
       </Box>
@@ -147,7 +166,6 @@ const Cart: React.FC = () => {
         value={values.tokenId}
         required
         fullWidth
-        autoFocus
         error={Boolean(errors.tokenId && touched.tokenId)}
         autoComplete="token-id"
         helperText={errors.tokenId}
@@ -167,7 +185,7 @@ const Cart: React.FC = () => {
           type="submit"
           variant="contained"
           sx={{ p: 2, width: '100%' }}
-          disabled={!cart.length || !!Object.keys(errors).length}
+          disabled={!cart.length || !!Object.keys(errors).length || !values.tokenId || isSubmitting}
         >
           Make an order
         </Button>

@@ -8,9 +8,10 @@ export default function MyOrder() {
   useSocket();
 
   const orderId = query.orderId as string;
-  const { data: myOrderData } = useMyOrder(orderId);
+  const { data: myOrderData, isError, isLoading } = useMyOrder(orderId);
 
-  if (!myOrderData) return 'Oops';
+  if (isLoading) return 'Loading...';
+  if (isError) return 'Oops';
 
   return <OrderConfirmation {...myOrderData} />;
 }

@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 export interface IApiResponse<T = {}> {
-  headers: any;
+  headers: Headers;
   data: T;
   status: number;
   statusText: string;

@@ -1,25 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
 import { onError } from '../../../utils/onError';
-import { prisma } from '@/lib';
 import { OrderStatus } from '@prisma/client';
 import type { NextApiResponseServerIO } from '../../../socketTypes';
-
-const getOrderByIdPrisma = (id: string) =>
-  prisma.order.findUnique({
-    where: { id },
-    include: {
-      orderDetails: {
-        include: {
-          menuItem: {
-            include: { dish: true },
-          },
-        },
-      },
-    },
-  });
-
-const updateOrderPrisma = (id: string, status: OrderStatus) => prisma.order.update({ where: { id }, data: { status } });
+import { getOrderByIdPrisma, updateOrderPrisma } from '@/db/orders';
 
 // GET /api/orders/:orderId
 const getOrder = async (req: NextApiRequest, res: NextApiResponse) => {

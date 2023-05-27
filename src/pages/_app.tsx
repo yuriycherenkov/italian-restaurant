@@ -9,7 +9,7 @@ import theme from '../theme';
 import { SessionProvider } from 'next-auth/react';
 import { Layout } from '@/components/Layout';
 import { CartContextProvider } from '@/context/CartContext';
-import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

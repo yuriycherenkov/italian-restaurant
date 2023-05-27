@@ -11,7 +11,7 @@ import type { OrderDetails } from '@/entitiesTypes';
 export const OrderDetailsList: React.FC<{ orderDetails: OrderDetails[] }> = ({ orderDetails }) => {
   return (
     <List>
-      {orderDetails.map((orderItem) => (
+      {orderDetails?.map((orderItem) => (
         <ListItem key={orderItem.id} secondaryAction={<Chip label={`x ${orderItem.quantity}`} variant="outlined" />}>
           <ListItemAvatar>
             <Avatar>

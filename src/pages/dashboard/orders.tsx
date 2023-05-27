@@ -5,10 +5,10 @@ import Grid from '@mui/material/Grid';
 import useCurrentOrders from '@/hooks/useOrders/useCurrentOrders';
 
 export default function Orders() {
-  const { data: orders } = useCurrentOrders();
-  if (!orders) return 'Loading...';
+  const { data: orders, isLoading } = useCurrentOrders();
 
-  if (!orders.length) return 'No orders';
+  if (isLoading) return 'Loading...';
+  if (!orders?.length) return 'No orders';
 
   return (
     <Grid container spacing={2}>

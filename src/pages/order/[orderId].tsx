@@ -7,7 +7,7 @@ export default function MyOrder() {
   const { query } = useRouter();
   useSocket();
 
-  const orderId = query.orderId as string;
+  const orderId = query?.orderId as string;
   const { data: myOrderData, isError, isLoading } = useMyOrder(orderId);
 
   if (isLoading) return 'Loading...';

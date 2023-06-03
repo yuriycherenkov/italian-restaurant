@@ -1,4 +1,4 @@
-import { GET_ORDERS } from '@/constants/reactQueryKeys';
+import { GET_CURRENT_ORDERS } from '@/constants/reactQueryKeys';
 import { Order } from '@/entitiesTypes';
 import { put } from '@/service/fetch';
 import { OrderStatus } from '@prisma/client';
@@ -11,21 +11,21 @@ const useUpdateOrderStatus = (id: string) => {
 
   return useMutation((status: OrderStatus) => updateOrderStatus(id, status), {
     onMutate: async (status: OrderStatus) => {
-      await queryClient.cancelQueries(GET_ORDERS);
+      await queryClient.cancelQueries(GET_CURRENT_ORDERS);
 
-      const previousOrders = queryClient.getQueryData<Order[]>(GET_ORDERS);
+      const previousOrders = queryClient.getQueryData<Order[]>(GET_CURRENT_ORDERS);
 
-      queryClient.setQueryData<Order[] | undefined>(GET_ORDERS, (oldOrder) =>
+      queryClient.setQueryData<Order[] | undefined>(GET_CURRENT_ORDERS, (oldOrder) =>
         oldOrder?.map((order) => (order.id === id ? { ...order, status } : { ...order }))
       );
 
       return { previousOrders };
     },
     onError: (_err, _status, context) => {
-      queryClient.setQueryData(GET_ORDERS, context?.previousOrders);
+      queryClient.setQueryData(GET_CURRENT_ORDERS, context?.previousOrders);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(GET_ORDERS);
+      queryClient.invalidateQueries(GET_CURRENT_ORDERS);
     },
   });
 };

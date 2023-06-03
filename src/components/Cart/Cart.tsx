@@ -20,9 +20,34 @@ import { useState } from 'react';
 import { AlertComponent } from '../AlertComponent';
 import { post } from '@/service/fetch';
 
-const StackStyled = styled(Stack)(({ theme }) => ({
+const BoxWrapperStyled = styled(Box)<{ noValidate: boolean }>(({ theme }) => ({
+  width: '100%',
+  padding: 16,
+  [theme.breakpoints.up('sm')]: {
+    width: 600,
+  },
+}));
+
+const StackStyledBold = styled(Stack)(({ theme }) => ({
   color: theme.palette.primary.main,
   fontWeight: 700,
+}));
+
+const StackStyled = styled(Stack)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    flexWrap: 'wrap',
+    marginBottom: 32,
+  },
+}));
+
+const StackStyledProduct = styled(Stack)(({ theme }) => ({
+  maxWidth: 340,
+  width: '100%',
+  marginRight: 16,
+  [theme.breakpoints.down('sm')]: {
+    marginBottom: 8,
+    marginRight: 0,
+  },
 }));
 
 const PaperStyled = styled(Paper)(() => ({
@@ -68,24 +93,28 @@ const Cart: React.FC = () => {
     },
   });
 
+  const emptyCart = !cart.length && !totalPrice;
+
   return (
-    <Box
+    <BoxWrapperStyled
       component="form"
-      onSubmit={(e) => {
+      onSubmit={(e: any) => {
         e.preventDefault();
         handleSubmit(e);
       }}
       noValidate
-      sx={{ width: 600, p: 2 }}
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
         <Typography variant="h5">Current Order</Typography>
-        <Button onClick={() => clearAll()}>Clear all</Button>
+        <Button disabled={emptyCart} onClick={() => clearAll()}>
+          Clear all
+        </Button>
       </Stack>
+      {emptyCart && <Typography variant="h6">Your cart is empty</Typography>}
       <Box sx={{ width: '100%', mb: 5 }}>
         {cart.map(({ item, quantity }) => (
-          <Stack direction="row" alignItems="center" key={item.id} sx={{ mb: 2 }}>
-            <Stack direction="row" alignItems="center" sx={{ maxWidth: 340, width: '100%', mr: 2 }}>
+          <StackStyled direction="row" alignItems="center" key={item.id} sx={{ mb: 2 }}>
+            <StackStyledProduct direction="row" alignItems="center">
               <Paper sx={{ overflow: 'hidden', height: 80, width: '100%', maxWidth: 80, mr: 1 }}>
                 <Image src={item.dish.image || 'todo'} height={80} alt="" width={80} />
               </Paper>
@@ -100,7 +129,7 @@ const Cart: React.FC = () => {
               >
                 {item.dish.title}
               </Typography>
-            </Stack>
+            </StackStyledProduct>
 
             <Stack direction="row" alignItems="center" sx={{ mr: 2 }}>
               <IconButton
@@ -122,9 +151,9 @@ const Cart: React.FC = () => {
                 <AddIcon fontSize="inherit" />
               </IconButton>
             </Stack>
-            <StackStyled direction="row" alignItems="center" sx={{ mr: 'auto' }}>
+            <StackStyledBold direction="row" alignItems="center" sx={{ mr: 'auto' }}>
               ${(item.price * quantity).toFixed(2)}
-            </StackStyled>
+            </StackStyledBold>
 
             <IconButton
               sx={{ ml: 'auto' }}
@@ -134,7 +163,7 @@ const Cart: React.FC = () => {
             >
               <DeleteIcon fontSize="inherit" />
             </IconButton>
-          </Stack>
+          </StackStyled>
         ))}
       </Box>
       <Box>
@@ -182,12 +211,12 @@ const Cart: React.FC = () => {
           type="submit"
           variant="contained"
           sx={{ p: 2, width: '100%' }}
-          disabled={!cart.length || !!Object.keys(errors).length || !values.tokenId || isSubmitting}
+          disabled={!!Object.keys(errors).length || !values.tokenId || isSubmitting || emptyCart}
         >
           Make an order
         </Button>
       </Box>
-    </Box>
+    </BoxWrapperStyled>
   );
 };
 

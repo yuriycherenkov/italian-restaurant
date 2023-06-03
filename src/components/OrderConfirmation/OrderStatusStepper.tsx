@@ -9,7 +9,7 @@ const STATUSES: OrderStatus[] = ['PENDING', 'PROCESSING', 'READY'];
 export const OrderStatusStepper: React.FC<{ status: OrderStatus }> = ({ status }) => {
   const activeStatus = React.useMemo(() => STATUSES.findIndex((item) => item === status) || 0, [status]);
   return (
-    <Stepper activeStep={activeStatus} alternativeLabel>
+    <Stepper activeStep={activeStatus} alternativeLabel sx={{ mb: 3 }}>
       {STATUSES.map((label) => (
         <Step key={label}>
           <StepLabel>{label}</StepLabel>

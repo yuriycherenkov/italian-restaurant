@@ -4,9 +4,10 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { OrderDetailsList } from '../OrderCard/OrderDetails';
 import { OrderStatusStepper } from './OrderStatusStepper';
 import { useSocket } from '@/hooks/useSocket';
+import { OrderDetailsCustomer } from './OrderDetailsCustomer';
+import { OrderSummary } from './OrderSummary';
 
 const OrderConfirmation: React.FC<any> = (props) => {
   const { id, orderDetails, status } = props;
@@ -23,13 +24,15 @@ const OrderConfirmation: React.FC<any> = (props) => {
   }, [socket]);
 
   return (
-    <Paper>
+    <Paper sx={{ py: 3, px: 2 }}>
       <Stack>
-        <Typography component="h1" variant="h4" gutterBottom align="center">
-          <CheckCircleOutlineIcon color="success" fontSize="large" />
-          Order Confirmation
-        </Typography>
-        <Typography component="h2" variant="h5" gutterBottom>
+        <Stack direction="row" alignItems="center" justifyContent="center" flexWrap="wrap" sx={{ mb: 2 }}>
+          <CheckCircleOutlineIcon color="success" fontSize="large" sx={{ mr: 1 }} />
+          <Typography component="h1" variant="h4">
+            Order Confirmation
+          </Typography>
+        </Stack>
+        <Typography component="h2" variant="h5" sx={{ mb: 3 }}>
           Order #{id}
         </Typography>
         {!isCompleted && <OrderStatusStepper status={activeStatus} />}
@@ -37,7 +40,8 @@ const OrderConfirmation: React.FC<any> = (props) => {
           Thank you for placing your order with Tratoria Italiano. We have received your order and it is currently being
           processed. Please find the details of your order below:
         </Typography>
-        <OrderDetailsList orderDetails={orderDetails} />
+        <OrderDetailsCustomer orderDetails={orderDetails} />
+        <OrderSummary orderDetails={orderDetails} />
         {isCompleted && <Chip label="Completed" variant="outlined" color="primary" />}
       </Stack>
     </Paper>

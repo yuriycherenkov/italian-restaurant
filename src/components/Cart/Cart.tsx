@@ -19,6 +19,8 @@ import { getToken } from './getToken';
 import { useState } from 'react';
 import { AlertComponent } from '../AlertComponent';
 import { post } from '@/service/fetch';
+import List from '@mui/material/List';
+import { ListItem } from '@mui/material';
 
 const BoxWrapperStyled = styled(Box)<{ noValidate: boolean }>(({ theme }) => ({
   width: '100%',
@@ -33,7 +35,8 @@ const StackStyledBold = styled(Stack)(({ theme }) => ({
   fontWeight: 700,
 }));
 
-const StackStyled = styled(Stack)(({ theme }) => ({
+const ListItemStyled = styled(ListItem)(({ theme }) => ({
+  padding: 0,
   [theme.breakpoints.down('sm')]: {
     flexWrap: 'wrap',
     marginBottom: 32,
@@ -45,6 +48,7 @@ const StackStyledProduct = styled(Stack)(({ theme }) => ({
   width: '100%',
   marginRight: 16,
   [theme.breakpoints.down('sm')]: {
+    maxWidth: '100%',
     marginBottom: 8,
     marginRight: 0,
   },
@@ -110,107 +114,115 @@ const Cart: React.FC = () => {
           Clear all
         </Button>
       </Stack>
-      {emptyCart && <Typography variant="h6">Your cart is empty</Typography>}
-      <Box sx={{ width: '100%', mb: 5 }}>
-        {cart.map(({ item, quantity }) => (
-          <StackStyled direction="row" alignItems="center" key={item.id} sx={{ mb: 2 }}>
-            <StackStyledProduct direction="row" alignItems="center">
-              <Paper sx={{ overflow: 'hidden', height: 80, width: '100%', maxWidth: 80, mr: 1 }}>
-                <Image src={item.dish.image || 'todo'} height={80} alt="" width={80} />
-              </Paper>
-              <Typography
-                variant="h6"
-                sx={{
-                  width: '100%',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {item.dish.title}
-              </Typography>
-            </StackStyledProduct>
 
-            <Stack direction="row" alignItems="center" sx={{ mr: 2 }}>
-              <IconButton
-                disabled={quantity <= 1}
-                onClick={() => {
-                  decreaseQuantity(item.id);
-                }}
-              >
-                <RemoveIcon fontSize="inherit" />
-              </IconButton>
-              <Typography variant="body1" sx={{ padding: 1 }}>
-                {quantity}
+      {emptyCart ? (
+        <Typography variant="h6" sx={{ mb: 3 }}>
+          Your cart is empty
+        </Typography>
+      ) : (
+        <>
+          <Box sx={{ width: '100%', mb: 5 }}>
+            <List>
+              {cart.map(({ item, quantity }) => (
+                <ListItemStyled alignItems="center" key={item.id} sx={{ mb: 2 }}>
+                  <StackStyledProduct direction="row" alignItems="center">
+                    <Paper sx={{ overflow: 'hidden', height: 80, width: '100%', maxWidth: 80, mr: 1 }}>
+                      <Image src={item.dish.image || 'todo'} height={80} alt="" width={80} />
+                    </Paper>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        width: '100%',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {item.dish.title}
+                    </Typography>
+                  </StackStyledProduct>
+
+                  <Stack direction="row" alignItems="center" sx={{ mr: 2 }}>
+                    <IconButton
+                      disabled={quantity <= 1}
+                      onClick={() => {
+                        decreaseQuantity(item.id);
+                      }}
+                    >
+                      <RemoveIcon fontSize="inherit" />
+                    </IconButton>
+                    <Typography variant="body1" sx={{ padding: 1 }}>
+                      {quantity}
+                    </Typography>
+                    <IconButton
+                      onClick={() => {
+                        addToCart(item);
+                      }}
+                    >
+                      <AddIcon fontSize="inherit" />
+                    </IconButton>
+                  </Stack>
+                  <StackStyledBold direction="row" alignItems="center" sx={{ mr: 'auto' }}>
+                    ${(item.price * quantity).toFixed(2)}
+                  </StackStyledBold>
+
+                  <IconButton
+                    sx={{ ml: 'auto' }}
+                    onClick={() => {
+                      removeFromCart(item.id);
+                    }}
+                  >
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                </ListItemStyled>
+              ))}
+            </List>
+          </Box>
+          <Box>
+            <PaperStyled elevation={2} sx={{ width: '100%', p: 2, mb: 5 }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="h6">Total</Typography>
+                <Typography variant="body1" sx={{ fontSize: 26 }}>
+                  ${totalPrice.toFixed(2)}
+                </Typography>
+              </Stack>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="body1">Including VAT</Typography>
+                <Typography variant="body2">${(totalPrice * 0.2).toFixed(2)}</Typography>
+              </Stack>
+            </PaperStyled>
+          </Box>
+          <Box>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography variant="h5" sx={{ width: '100%', textAlign: 'center', mb: 1 }}>
+                Payment Method
               </Typography>
-              <IconButton
-                onClick={() => {
-                  addToCart(item);
-                }}
-              >
-                <AddIcon fontSize="inherit" />
-              </IconButton>
             </Stack>
-            <StackStyledBold direction="row" alignItems="center" sx={{ mr: 'auto' }}>
-              ${(item.price * quantity).toFixed(2)}
-            </StackStyledBold>
-
-            <IconButton
-              sx={{ ml: 'auto' }}
-              onClick={() => {
-                removeFromCart(item.id);
-              }}
-            >
-              <DeleteIcon fontSize="inherit" />
-            </IconButton>
-          </StackStyled>
-        ))}
-      </Box>
-      <Box>
-        <PaperStyled elevation={2} sx={{ width: '100%', p: 2, mb: 5 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6">Total</Typography>
-            <Typography variant="body1" sx={{ fontSize: 26 }}>
-              ${totalPrice.toFixed(2)}
-            </Typography>
-          </Stack>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="body1">Including VAT</Typography>
-            <Typography variant="body2" sx={{ fontSize: 26 }}>
-              ${(totalPrice * 0.2).toFixed(2)}
-            </Typography>
-          </Stack>
-        </PaperStyled>
-      </Box>
-      <Box>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="h5" sx={{ width: '100%', textAlign: 'center', mb: 1 }}>
-            Payment Method
-          </Typography>
-        </Stack>
-      </Box>
-      <PaymentRadio onClickHandler={handleChange} values={radioValues} name="paymentMethod" />
-      <TextField
-        id="tokenId"
-        label="please enter token ID"
-        name="tokenId"
-        onChange={handleChange}
-        value={values.tokenId}
-        required
-        fullWidth
-        error={Boolean(errors.tokenId && touched.tokenId)}
-        autoComplete="token-id"
-        helperText={errors.tokenId}
-        margin="normal"
-        sx={{ mb: 2 }}
-      />
-      <AlertComponent
-        hasError={!!tokenIDError}
-        severity="error"
-        resetError={() => setError('')}
-        message={tokenIDError}
-        sx={{ mb: 2 }}
-      />
+          </Box>
+          <PaymentRadio onClickHandler={handleChange} values={radioValues} name="paymentMethod" />
+          <TextField
+            id="tokenId"
+            label="please enter token ID"
+            name="tokenId"
+            onChange={handleChange}
+            value={values.tokenId}
+            required
+            fullWidth
+            error={Boolean(errors.tokenId && touched.tokenId)}
+            autoComplete="token-id"
+            helperText={errors.tokenId}
+            margin="normal"
+            sx={{ mb: 2 }}
+          />
+          <AlertComponent
+            hasError={!!tokenIDError}
+            severity="error"
+            resetError={() => setError('')}
+            message={tokenIDError}
+            sx={{ mb: 2 }}
+          />
+        </>
+      )}
 
       <Box sx={{ width: '100%', mb: 5 }}>
         <Button

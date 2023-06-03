@@ -171,7 +171,13 @@ const Cart: React.FC = () => {
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">Total</Typography>
             <Typography variant="body1" sx={{ fontSize: 26 }}>
-              {totalPrice.toFixed(2)}
+              ${totalPrice.toFixed(2)}
+            </Typography>
+          </Stack>
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Typography variant="body1">Including VAT</Typography>
+            <Typography variant="body2" sx={{ fontSize: 26 }}>
+              ${(totalPrice * 0.2).toFixed(2)}
             </Typography>
           </Stack>
         </PaperStyled>

@@ -1,15 +1,10 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { OrderDetails } from '@/entitiesTypes';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 
-export const OrderSummary: React.FC<{ orderDetails?: OrderDetails[] }> = ({ orderDetails = [] }) => {
-  const totalPrice = orderDetails.reduce((total, { quantity, menuItem }) => {
-    return total + menuItem.price * quantity;
-  }, 0);
-
+export const OrderSummary: React.FC<{ totalPrice: number }> = ({ totalPrice }) => {
   return (
     <Paper
       sx={{

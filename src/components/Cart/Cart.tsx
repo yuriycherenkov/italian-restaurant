@@ -21,6 +21,7 @@ import { AlertComponent } from '../AlertComponent';
 import { post } from '@/service/fetch';
 import List from '@mui/material/List';
 import { ListItem } from '@mui/material';
+import { useRouter } from 'next/router';
 
 const BoxWrapperStyled = styled(Box)<{ noValidate: boolean }>(({ theme }) => ({
   width: '100%',
@@ -62,12 +63,15 @@ const PaperStyled = styled(Paper)(() => ({
 const radioValues = [PAYMENT_METHOD.CART, PAYMENT_METHOD.CASH];
 
 const Cart: React.FC = () => {
+  const { query } = useRouter();
+  const tokenId = query?.tokenId as string | undefined;
+
   const [tokenIDError, setError] = useState('');
 
   const { cart, addToCart, removeFromCart, decreaseQuantity, clearAll, totalPrice } = useCartContext();
   const { handleSubmit, handleChange, values, errors, touched, isSubmitting } = useFormik({
     initialValues: {
-      tokenId: '',
+      tokenId: tokenId ?? '',
       paymentMethod: PAYMENT_METHOD.CART,
     },
     validationSchema: validationSchemaOrder,
@@ -90,7 +94,7 @@ const Cart: React.FC = () => {
           },
         });
 
-        window.location.href = result.checkout_url;
+        window.location.href = result.checkout_url ?? `/order/${result.id}`;
       } catch (error: any) {
         setError(error?.response?.data?.error || 'something went wrong');
       }
@@ -207,6 +211,7 @@ const Cart: React.FC = () => {
             onChange={handleChange}
             value={values.tokenId}
             required
+            disabled={!!tokenId}
             fullWidth
             error={Boolean(errors.tokenId && touched.tokenId)}
             autoComplete="token-id"

@@ -10,7 +10,7 @@ export default function MyOrder() {
   const orderId = query?.orderId as string;
   const { data: myOrderData, isError, isLoading } = useMyOrder(orderId);
 
-  if (isLoading) return 'Loading...';
+  if (isLoading || !myOrderData) return 'Loading...';
   if (isError) return 'Oops';
 
   return <OrderConfirmation {...myOrderData} />;

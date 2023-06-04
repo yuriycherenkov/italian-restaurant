@@ -10,7 +10,7 @@ import { OrderSummary } from './OrderSummary';
 import Alert from '@mui/material/Alert';
 
 const OrderConfirmation: React.FC<any> = (props) => {
-  const { id, orderDetails, status } = props;
+  const { id, orderDetails, status, totalPrice } = props;
   const socket = useSocket();
   const [activeStatus, setStatus] = React.useState(status);
   const isCompleted = activeStatus === 'PICKED';
@@ -41,7 +41,7 @@ const OrderConfirmation: React.FC<any> = (props) => {
           processed. Please find the details of your order below:
         </Typography>
         <OrderDetailsCustomer orderDetails={orderDetails} />
-        <OrderSummary orderDetails={orderDetails} />
+        <OrderSummary totalPrice={totalPrice} />
         {isCompleted && <Alert severity="success">Completed!</Alert>}
       </Stack>
     </Paper>

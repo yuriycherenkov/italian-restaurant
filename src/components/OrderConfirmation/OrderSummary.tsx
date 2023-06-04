@@ -1,17 +1,19 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { OrderDetails } from '@/entitiesTypes';
 import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
 
-export const OrderSummary: React.FC<{ orderDetails: OrderDetails[] }> = ({ orderDetails }) => {
-  const totalPrice = orderDetails.reduce((total, { quantity, menuItem }) => {
-    return total + menuItem.price * quantity;
-  }, 0);
-
+export const OrderSummary: React.FC<{ totalPrice: number }> = ({ totalPrice }) => {
   return (
-    <Box sx={{ width: '50%', border: '1px solid black' }}>
+    <Paper
+      sx={{
+        width: ['100%', '100%', '50%'],
+        mb: 3,
+        ml: 'auto',
+        p: 2,
+      }}
+    >
       <Typography component="h4"> Order Summary</Typography>
       <Stack spacing={2}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -32,6 +34,6 @@ export const OrderSummary: React.FC<{ orderDetails: OrderDetails[] }> = ({ order
           <Typography>$ {totalPrice.toFixed(2)}</Typography>
         </Stack>
       </Stack>
-    </Box>
+    </Paper>
   );
 };

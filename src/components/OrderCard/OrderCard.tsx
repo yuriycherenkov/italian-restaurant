@@ -13,7 +13,7 @@ import { OrderDetailsList } from './OrderDetails';
 const STATUSES: OrderStatus[] = ['PENDING', 'PROCESSING', 'READY', 'PICKED'];
 
 const OrderCard: React.FC<Order> = (props) => {
-  const { id, status: activeStatus, orderDetails } = props;
+  const { id, status: activeStatus, orderDetails, tokenId } = props;
   const { mutate: updateOrderStatus } = useUpdateOrderStatus(id);
 
   const updateStatus = (status: OrderStatus) => {
@@ -25,6 +25,9 @@ const OrderCard: React.FC<Order> = (props) => {
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           Order #{id}
+        </Typography>
+        <Typography gutterBottom variant="h6" component="div">
+          Token Id #{tokenId}
         </Typography>
         <OrderDetailsList orderDetails={orderDetails} />
       </CardContent>

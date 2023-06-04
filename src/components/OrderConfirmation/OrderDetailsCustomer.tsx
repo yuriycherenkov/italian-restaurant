@@ -10,7 +10,7 @@ import type { OrderDetails } from '@/entitiesTypes';
 
 export const OrderDetailsCustomer: React.FC<{ orderDetails: OrderDetails[] }> = ({ orderDetails }) => {
   return (
-    <List>
+    <List sx={{ mb: 2 }}>
       {orderDetails?.map((orderItem, index) => (
         <ListItem
           key={`${orderItem.id}_${index}`}

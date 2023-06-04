@@ -44,8 +44,8 @@ export const getCurrentOrdersPrisma = () =>
     },
   });
 
-export const getOrderByIdPrisma = (id: string) =>
-  prisma.order.findUnique({
+export const getOrderByIdPrisma = async (id: string) => {
+  const order = await prisma.order.findUnique({
     where: { id },
     include: {
       orderDetails: {
@@ -57,6 +57,14 @@ export const getOrderByIdPrisma = (id: string) =>
       },
     },
   });
+
+  const orderDetails = order?.orderDetails ?? [];
+  const totalPrice = orderDetails.reduce((total, { quantity, menuItem }) => {
+    return total + menuItem.price * quantity;
+  }, 0);
+
+  return { ...order, totalPrice };
+};
 
 export const createOrderPrisma = ({ orderCartInfo, paymentDetails }: OrderInfo) => {
   const orderDetails = orderCartInfo.map((detail) => ({

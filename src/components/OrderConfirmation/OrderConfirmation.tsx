@@ -1,16 +1,16 @@
 import React from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { OrderStatusStepper } from './OrderStatusStepper';
 import { useSocket } from '@/hooks/useSocket';
 import { OrderDetailsCustomer } from './OrderDetailsCustomer';
 import { OrderSummary } from './OrderSummary';
+import Alert from '@mui/material/Alert';
 
 const OrderConfirmation: React.FC<any> = (props) => {
-  const { id, orderDetails, status } = props;
+  const { id, orderDetails, status, totalPrice } = props;
   const socket = useSocket();
   const [activeStatus, setStatus] = React.useState(status);
   const isCompleted = activeStatus === 'PICKED';
@@ -41,8 +41,8 @@ const OrderConfirmation: React.FC<any> = (props) => {
           processed. Please find the details of your order below:
         </Typography>
         <OrderDetailsCustomer orderDetails={orderDetails} />
-        <OrderSummary orderDetails={orderDetails} />
-        {isCompleted && <Chip label="Completed" variant="outlined" color="primary" />}
+        <OrderSummary totalPrice={totalPrice} />
+        {isCompleted && <Alert severity="success">Completed!</Alert>}
       </Stack>
     </Paper>
   );

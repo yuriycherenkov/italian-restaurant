@@ -38,7 +38,7 @@ export default function App(props: AppPropsWithEMotion) {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
-        <title>Create Next App</title>
+        <title>Trattoria Italiano</title>
         <meta name="description" content="Italian restaurant" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -46,7 +46,6 @@ export default function App(props: AppPropsWithEMotion) {
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider theme={theme}>
-            {/* Providers */}
             <CssBaseline />
             <SessionProvider session={session}>
               <CartContextProvider>

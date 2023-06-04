@@ -1,13 +1,13 @@
 import React from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { OrderStatusStepper } from './OrderStatusStepper';
 import { useSocket } from '@/hooks/useSocket';
 import { OrderDetailsCustomer } from './OrderDetailsCustomer';
 import { OrderSummary } from './OrderSummary';
+import Alert from '@mui/material/Alert';
 
 const OrderConfirmation: React.FC<any> = (props) => {
   const { id, orderDetails, status } = props;
@@ -42,7 +42,7 @@ const OrderConfirmation: React.FC<any> = (props) => {
         </Typography>
         <OrderDetailsCustomer orderDetails={orderDetails} />
         <OrderSummary orderDetails={orderDetails} />
-        {isCompleted && <Chip label="Completed" variant="outlined" color="primary" />}
+        {isCompleted && <Alert severity="success">Completed!</Alert>}
       </Stack>
     </Paper>
   );

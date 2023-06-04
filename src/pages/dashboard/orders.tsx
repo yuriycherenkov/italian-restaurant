@@ -11,7 +11,7 @@ export default function Orders() {
   if (!orders?.length) return 'No orders';
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ my: 2 }}>
       <Masonry columns={3} spacing={2}>
         {orders.map((order, index) => (
           <OrderCard key={index} {...order} />

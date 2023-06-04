@@ -13,6 +13,7 @@ export const OrderDetailsList: React.FC<{ orderDetails: OrderDetails[] }> = ({ o
     <List>
       {orderDetails?.map((orderItem, index) => (
         <ListItem
+          sx={{ px: 0 }}
           key={`${orderItem.id}_${index}`}
           secondaryAction={<Chip label={`x ${orderItem.quantity}`} variant="outlined" />}
         >
